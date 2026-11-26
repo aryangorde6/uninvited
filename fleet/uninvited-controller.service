@@ -12,6 +12,9 @@ WorkingDirectory=/opt/uninvited
 ExecStart=/opt/uninvited/.venv/bin/python -m uninvited.controller
 Restart=always
 RestartSec=10
+# Stop with SIGINT, not the default SIGTERM: Python then runs the controller's cleanup, which sends
+# Flagsmith any events still buffered (up to a minute of came_back events) before it exits.
+KillSignal=SIGINT
 NoNewPrivileges=yes
 ProtectSystem=strict
 ProtectHome=yes

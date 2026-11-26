@@ -62,7 +62,7 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 | `uninvited/asn.py` | Network operator and country from an offline table, looked up once at enrolment |
 | `uninvited/report.py` | The integrity gate and the pre-registered analysis |
 | `uninvited/export.py` | The anonymised dataset the website reads |
-| `fleet/` | Launcher with hard limits, cloud-init for servers and controller, the ban and log scripts, the firewall table, setup checks |
+| `fleet/` | Launcher with hard limits, cloud-init for servers and controller, the ban and log scripts, the firewall table, setup checks, the controller update script |
 | `site/` | The website |
 | `tests/` | 60 tests, run on every push by `.github/workflows/tests.yml` |
 
@@ -111,7 +111,7 @@ Copy this repository to `/opt/uninvited` on the controller and run `sudo sh /opt
 ```
 A new AWS account may allow only a few small instances per region until a quota increase; `REGIONS` lists 13 regions so servers can be spread out.
 
-**5. Start the controller:** on the controller, write `/etc/uninvited/controller.env` from `fleet/controller.env.example`, the server list `/etc/uninvited/fleet.json` (`name`, `host`, `port` per server, from `data/fleet.json`), their host keys `/etc/uninvited/ssh/known_hosts` (from `data/known_hosts`) and the Flagsmith key file, then `sudo systemctl enable --now uninvited-controller`.
+**5. Start the controller:** on the controller, write `/etc/uninvited/controller.env` from `fleet/controller.env.example`, the server list `/etc/uninvited/fleet.json` (`name`, `host`, `port` per server, from `data/fleet.json`), their host keys `/etc/uninvited/ssh/known_hosts` (from `data/known_hosts`) and the Flagsmith key file, then `sudo systemctl enable --now uninvited-controller`. To change its code later, commit and run `UNINVITED_ADMIN_PORT=PORT fleet/update-controller.sh CONTROLLER_HOST` (compares only), then the same with `--go`: it backs up the data, installs the committed code, restarts the service and reports what it logged.
 
 **6. Start the experiment:** create the experiment on `ban_policy` in Flagsmith (rollout 100%, primary metric `came_back`), then turn `ban_enforce` on. Nobody is enrolled outside `UNINVITED_ENROL_FROM`–`UNINVITED_ENROL_UNTIL`.
 
