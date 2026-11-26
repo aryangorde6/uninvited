@@ -2,6 +2,7 @@
 
   python -m uninvited.report --data /var/lib/uninvited                      # gate checks + results
   python -m uninvited.report --data DIR --flagsmith flagsmith.json          # also compare with Flagsmith
+  python -m uninvited.report --snapshot site/data/snapshot.json             # the same, from the published dataset
 
 flagsmith.json holds the numbers read off Flagsmith's results page, per arm:
   {"control": {"exposures": 120, "conversions": 18}, "ban_10m": {...}, "ban_12h": {...}}
@@ -36,6 +37,22 @@ def load(data_dir):
                 except ValueError:
                     pass
     return attackers, events
+
+
+def load_snapshot(path):
+    """The published, anonymised dataset (site/data/snapshot.json) turned back into the controller's
+    state format, so the same analysis runs on it. Returns (attackers, totals, generated)."""
+    with open(path) as f:
+        snap = json.load(f)
+    values = {name: value for value, name in ARMS.items()}
+    attackers = {}
+    for r in snap["attackers"]:
+        hours = r.get("came_back_hours")
+        attackers[r["id"]] = {"arm": values.get(r["arm"], r["arm"]), "seconds": r.get("ban_seconds", 0),
+                              "first_catch": r["first_catch"], "first_vm": r.get("first_server", ""),
+                              "came_back_at": r["first_catch"] + hours * 3600 if hours is not None else 0.0,
+                              "net": r.get("net", ""), "asn": r.get("asn", 0), "country": r.get("country", "")}
+    return attackers, snap.get("totals", {}), snap.get("generated")
 
 
 def arm_of(a):
@@ -125,7 +142,8 @@ def comparison(label, attackers, out):
     return r
 
 
-def report(attackers, events, now, flagsmith=None):
+def report(attackers, events, now, flagsmith=None, published=None):
+    """`published`: the snapshot's totals, when reading the published dataset (which has no event log)."""
     out, ok = [], True
 
     def check(name, passed, detail):
@@ -143,13 +161,16 @@ def report(attackers, events, now, flagsmith=None):
     check("sample ratio (34/33/33)", p > 0.01, f"{enrolled}, p = {p:.3f}")
     check("no unknown arm values", others == 0, f"{others} attackers with a value outside 0/600/43200")
 
-    logged = {e["id"] for e in events if e.get("what") == "came_back"}
-    in_state = {k for k, a in attackers.items() if a.get("came_back_at")}
-    check("came_back: log matches state", logged == in_state, f"{len(logged)} logged, {len(in_state)} in state")
-
-    posts = [e.get("status", "") for e in events if e.get("what") == "events_post"]
-    bad = [s for s in posts if not s.startswith("2")]
-    check("every event batch accepted by Flagsmith", not bad, f"{len(posts)} batches, {len(bad)} not 2xx")
+    if published is None:
+        logged = {e["id"] for e in events if e.get("what") == "came_back"}
+        in_state = {k for k, a in attackers.items() if a.get("came_back_at")}
+        check("came_back: log matches state", logged == in_state, f"{len(logged)} logged, {len(in_state)} in state")
+        posts = [e.get("status", "") for e in events if e.get("what") == "events_post"]
+        n_posts, n_bad = len(posts), sum(not s.startswith("2") for s in posts)
+    else:
+        out.append("  [----] came_back log against state skipped (the controller's event log isn't published)")
+        n_posts, n_bad = published.get("event_batches", 0), published.get("event_batches_not_2xx", 0)
+    check("every event batch accepted by Flagsmith", n_bad == 0, f"{n_posts} batches, {n_bad} not 2xx")
 
     if flagsmith:
         r_all = rates(attackers)
@@ -182,11 +203,20 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default="data")
     ap.add_argument("--flagsmith", help="JSON of exposures and conversions per arm, read from Flagsmith")
-    ap.add_argument("--now", type=float, default=None, help="Unix time to evaluate at (default: now)")
+    ap.add_argument("--snapshot", help="read the published dataset (site/data/snapshot.json) instead of --data")
+    ap.add_argument("--now", type=float, default=None,
+                    help="Unix time to evaluate at (default: now, or the snapshot's own time)")
     a = ap.parse_args()
-    attackers, events = load(a.data)
     fs = json.load(open(a.flagsmith)) if a.flagsmith else None
-    text, ok = report(attackers, events, a.now or time.time(), fs)
+    if a.snapshot:
+        attackers, totals, generated = load_snapshot(a.snapshot)
+        text, ok = report(attackers, [], a.now or generated or time.time(), fs, published=totals)
+    else:
+        if not any(os.path.exists(os.path.join(a.data, f)) for f in ("state.json", "events.jsonl")):
+            raise SystemExit(f"no controller data in {a.data!r} (no state.json or events.jsonl), so nothing to check.\n"
+                             "For the published dataset: python3 -m uninvited.report --snapshot site/data/snapshot.json")
+        attackers, events = load(a.data)
+        text, ok = report(attackers, events, a.now or time.time(), fs)
     print(text)
     raise SystemExit(0 if ok else 1)
 

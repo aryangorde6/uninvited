@@ -11,7 +11,8 @@
 - **The question:** does banning an attacker for fail2ban's default 10 minutes lower the share who come back 12–24 hours later, compared with no ban? The hypothesis was committed at 1:17 PM IST on 26 Nov, before enrolment opened at 2:00 PM ([`PREREGISTRATION.md`](PREREGISTRATION.md), commit `5df9a95`), and the same sentence is in the Flagsmith experiment's hypothesis field.
 - **The users are real.** Nobody here is simulated: every identity is an address that tried to log in to one of our servers.
 - **Replay it with no key and nothing to install:** the website has no backend. Each page draws itself from one anonymised file, [`site/data/snapshot.json`](site/data/snapshot.json), so the final snapshot is also the replay. To run it on your machine: `python3 -m http.server 8765 --directory site`, then open http://localhost:8765.
-- **The integrity gate runs before any result is read.** `python -m uninvited.report` prints PASS or FAIL for the sample ratio, unknown arm values, `came_back` in the log against the saved state, every event batch accepted by Flagsmith, and Flagsmith's numbers per arm against ours (details below).
+- **The integrity gate runs before any result is read.** It prints PASS or FAIL for the sample ratio, unknown arm values, `came_back` in the log against the saved state, every event batch accepted by Flagsmith, and Flagsmith's numbers per arm against ours (details below).
+- **Re-run the analysis yourself, also with nothing to install:** `python3 -m uninvited.report --snapshot site/data/snapshot.json` (standard library only) reads the same published file and prints the gate and every result: per arm, per /24 and per network operator, with the intervals. Only the check of the controller's private event log is skipped.
 - **Result:** _pending; the experiment is running._ It is read from Flagsmith's results page and checked by our own calculation once the last window has closed. While the interval on the difference spans zero, the result is "can't call it", with the traffic that would settle it; that wording was fixed in advance.
 - **Video:** _to come._
 - **What a run costs:** about **$27 of AWS** (an estimate: 48 `t4g.nano` servers and one `t4g.micro` controller from Thursday to Saturday afternoon, stopped after the last window), and Flagsmith's free plan. Replaced with the bill after the run.
@@ -43,7 +44,7 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 | Event `came_back` | Sent with `track_event` the first time the attacker reaches port 22 again, 12h05m–24h05m after it was first caught. |
 | Experiment | `came_back` as the primary metric, lower is better, with the pre-registered hypothesis. Its results page gives the win probability and the credible interval. |
 | Flag `ban_enforce` | The kill switch, read every 30 seconds: off means no new enrolments and no new bans on any server. |
-| Rollout | At the end the winning ban length is set for everyone with the same `ban_policy` flag, and every server applies it. |
+| Rollout | Once enrolment has closed, an attacker outside the experiment gets `ban_policy`'s value for everyone, read every 30 seconds along with the kill switch (environment flags, no identity, so no exposure). When the experiment ends, the winner is rolled out by setting that value in Flagsmith, and the next catch on any server gets it within 30 seconds. Attackers in the experiment keep their arm, so the rollout can't touch the measurement. |
 
 ## How it works
 
@@ -63,7 +64,7 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 | `uninvited/export.py` | The anonymised dataset the website reads |
 | `fleet/` | Launcher with hard limits, cloud-init for servers and controller, the ban and log scripts, the firewall table, setup checks |
 | `site/` | The website |
-| `tests/` | 54 tests |
+| `tests/` | 60 tests, run on every push by `.github/workflows/tests.yml` |
 
 ## Data
 
@@ -120,6 +121,7 @@ A new AWS account may allow only a few small instances per region until a quota 
 ```bash
 cd /opt/uninvited && sudo python3 -m uninvited.report --data /var/lib/uninvited   # on the controller
 python3 -m uninvited.report --data DIR --flagsmith flagsmith.json              # with Flagsmith's numbers per arm
+python3 -m uninvited.report --snapshot site/data/snapshot.json                 # from the published dataset
 ```
 The gate's output starts like this (from the run on Thu 26 Nov, 7:00 PM IST, before any window had closed):
 ```

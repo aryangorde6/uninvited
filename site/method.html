@@ -103,7 +103,7 @@
           <li><b>The flag holds the policy.</b> <code>ban_policy</code> is a multivariate flag; its value is the ban length every server applies. Without Flagsmith, the servers don't know how long to ban.</li>
           <li><b>The experiment does the split.</b> Flagsmith assigns each attacker an arm and records the exposure; <code>came_back</code> is the metric (an occurrence, lower is better).</li>
           <li><b>A kill switch.</b> <code>ban_enforce</code>, read every 30 seconds: when it is off, nobody new is enrolled and no new ban is applied.</li>
-          <li><b>Ship the winner.</b> When the experiment is complete, the winning value goes to everyone through the same flag, and every new catch on every server is banned for that length.</li>
+          <li><b>Ship the winner.</b> When the experiment is complete, the winning value goes to everyone through the same flag: within 30 seconds every server bans each newly caught attacker for that length. Attackers already in the experiment keep their arm.</li>
         </ul>
       </div>
       <div>

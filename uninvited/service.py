@@ -81,6 +81,9 @@ class Service:
 
         if who is None:
             reason = self.why_not_enrol(ev.ts, enforcing)
+            if reason and enforcing and ev.ts >= self.enrol_until:
+                self.rollout(vm, ev, ident)           # enrolment has closed: the flag's value for everyone else
+                return
             if reason:
                 self.log({"t": ev.ts, "what": "catch_not_enrolled", "vm": vm, "id": ident, "why": reason})
                 return
@@ -110,6 +113,19 @@ class Service:
         else:
             self.log({"t": ev.ts, "what": "caught_not_banned", "vm": vm, "id": ident, "arm": who.arm,
                       "why": "arm has no ban" if enforcing else "ban_enforce is off"})
+
+    def rollout(self, vm, ev, ident):
+        """After enrolment has closed, an attacker outside the experiment gets `ban_policy`'s value for
+        everyone: what the flag is set to once the experiment ends and the winner is rolled out.
+        Attackers in the experiment keep their arm, so the rollout can't touch the measurement."""
+        value = self.flags.rollout()
+        seconds = ban_seconds(value) if value is not None else 0
+        if seconds > 0:
+            self.ban(ev.ip, seconds, ev.ts)
+            self.log({"t": ev.ts, "what": "rollout_banned", "vm": vm, "id": ident, "value": str(value),
+                      "seconds": seconds})
+        else:
+            self.log({"t": ev.ts, "what": "rollout_not_banned", "vm": vm, "id": ident, "value": str(value)})
 
     def why_not_enrol(self, ts, enforcing):
         if not enforcing:

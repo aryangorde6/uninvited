@@ -7,8 +7,12 @@ H = 3600
 
 
 class FakeFlags:
-    def __init__(self, arms, enforce=True):
+    def __init__(self, arms, enforce=True, policy=None):
         self.arms, self.enforce, self.assigned, self.events = arms, enforce, [], []
+        self.policy = policy
+
+    def rollout(self):
+        return self.policy
 
     def assign(self, ident):
         self.assigned.append(ident)
@@ -98,7 +102,7 @@ def test_protected_and_private_addresses_are_never_enrolled_or_banned(tmp_path):
 def test_enrolment_window_and_cap(tmp_path):
     svc, flags, bans, log = make(tmp_path, {ID: 600})
     attack(svc, IP, 48 * H)
-    assert flags.assigned == [] and log[-1]["why"] == "outside the enrolment window"
+    assert flags.assigned == [] and bans == [] and log[-1]["what"] == "rollout_not_banned"   # closed: not enrolled
     other = "81.2.69.143"
     svc2, flags2, _, log2 = make(tmp_path / "c" if (tmp_path / "c").mkdir() is None else tmp_path,
                                  {ID: 600, identity(other, KEY): 0}, max_enrolled=1)
@@ -139,3 +143,46 @@ def test_flagsmith_error_means_observe_only_and_retry(tmp_path):
     flags.assign = real
     attack(svc, IP, 100)
     assert bans == [(IP, 600)]
+
+
+# The rollout: once enrolment has closed (enrol_until = 48 h here), attackers outside the experiment
+# get ban_policy's value for everyone, which is how the winner is rolled out with the same flag.
+
+def test_after_enrolment_a_new_attacker_gets_the_rolled_out_ban(tmp_path):
+    svc, flags, bans, log = make(tmp_path, {ID: 600})
+    flags.policy = "43200"
+    attack(svc, IP, 49 * H)
+    assert flags.assigned == [] and ID not in svc.state.attackers       # never enrolled, no exposure
+    assert bans == [(IP, 43200)] and log[-1]["what"] == "rollout_banned"
+    flags.policy = "600"                                                 # the flag changed in Flagsmith
+    attack(svc, IP, 50 * H)
+    assert bans[-1] == (IP, 600)
+
+
+def test_rollout_no_ban_flag_off_or_unread_and_kill_switch(tmp_path):
+    for policy in ("0", "none", None):
+        svc, flags, bans, log = make(tmp_path, {})
+        flags.policy = policy
+        attack(svc, IP, 49 * H)
+        assert bans == [] and log[-1]["what"] == "rollout_not_banned"
+    svc, flags, bans, log = make(tmp_path, {}, enforce=False)
+    flags.policy = "600"
+    attack(svc, IP, 49 * H)
+    assert bans == [] and log[-1]["what"] == "catch_not_enrolled"       # ban_enforce off: nothing is banned
+
+
+def test_enrolled_attackers_keep_their_arm_after_the_rollout(tmp_path):
+    svc, flags, bans, _ = make(tmp_path, {ID: 600})
+    attack(svc, IP, 0)
+    flags.policy = "43200"
+    attack(svc, IP, 49 * H)
+    assert bans == [(IP, 600), (IP, 600)] and flags.assigned == [ID]
+
+
+def test_before_enrolment_opens_nothing_is_banned(tmp_path):
+    flags, bans, log = FakeFlags({}, policy="600"), [], []
+    svc = Service(state=State(str(tmp_path / "state.json")), flags=flags,
+                  ban=lambda ip, s, t: bans.append((ip, s)), log=log.append,
+                  hash_key=KEY, protected=set(), enrol_from=10 * H, enrol_until=48 * H)
+    attack(svc, IP, 0)
+    assert bans == [] and log[-1]["what"] == "catch_not_enrolled"

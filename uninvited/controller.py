@@ -25,12 +25,13 @@ SSH_OPTS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-o", "ServerAlive
 
 
 class Flags:
-    """The three things the service asks Flagsmith."""
+    """The four things the service asks Flagsmith."""
 
     def __init__(self, key, log, feature="ban_policy", kill="ban_enforce", event="came_back", poll=30):
         self.fs = Flagsmith(environment_key=key, enable_events=True)
         self.log, self.feature, self.kill, self.event, self.poll = log, feature, kill, event, poll
         self._enforcing, self._checked = False, 0.0    # off until Flagsmith says otherwise
+        self._policy = None                            # ban_policy's value for everyone; None until read
 
     def assign(self, ident):
         """The arm's flag value, or None if this identity is not in the running experiment."""
@@ -44,19 +45,36 @@ class Flags:
         self.fs.track_event(self.event, identifier=ident)
 
     def enforcing(self):
-        """The kill switch, read at most every `poll` seconds; the last answer is kept if Flagsmith is down."""
+        """The kill switch, read at most every `poll` seconds; the last answer is kept if Flagsmith is down.
+        The same read (environment flags, no identity, so no exposure) also refreshes `ban_policy`'s
+        value for everyone, which `rollout` returns."""
         now = time.time()
         if now - self._checked >= self.poll:
             self._checked = now
             try:
-                value = bool(self.fs.get_environment_flags().is_feature_enabled(self.kill))
+                env = self.fs.get_environment_flags()
+                value = bool(env.is_feature_enabled(self.kill))
             except Exception as e:
                 self.log({"t": now, "what": "kill_switch_unreadable", "error": type(e).__name__})
             else:
                 if value != self._enforcing:
                     self.log({"t": now, "what": "kill_switch", "enforcing": value})
                 self._enforcing = value
+                try:
+                    flag = env.get_flag(self.feature)
+                    policy = str(flag.value) if flag.enabled and flag.value is not None else None
+                except Exception as e:
+                    self.log({"t": now, "what": "rollout_policy_unreadable", "error": type(e).__name__})
+                else:
+                    if policy != self._policy:
+                        self.log({"t": now, "what": "rollout_policy", "value": policy})
+                    self._policy = policy
         return self._enforcing
+
+    def rollout(self):
+        """`ban_policy`'s value for everyone outside the experiment (None: flag off or not read yet)."""
+        self.enforcing()
+        return self._policy
 
 
 class EventPosts(logging.Handler):

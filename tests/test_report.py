@@ -64,3 +64,30 @@ def test_sample_ratio_and_beta():
     assert srm_p({"control": 500, "ban_10m": 250, "ban_12h": 250}) < 0.001
     p_lower, lo, hi = beta_compare(1000, 400, 1000, 100)
     assert p_lower > 0.999 and hi < 0
+
+
+def test_published_snapshot_gives_the_same_analysis(tmp_path):
+    """The analysis run on the published, anonymised file matches the analysis on the controller's own data."""
+    import json
+    from uninvited.export import snapshot
+    from uninvited.report import load_snapshot
+    attackers = fake({"0": 0.30, "600": 0.30, "43200": 0.10}, n=120)
+    events = came_back_log(attackers) + [{"what": "events_post", "status": "202"}] * 3
+    path = tmp_path / "snapshot.json"
+    path.write_text(json.dumps(snapshot(attackers, events, NOW)))
+    raw_text, raw_ok = report(attackers, events, NOW)
+    back, totals, generated = load_snapshot(str(path))
+    snap_text, snap_ok = report(back, [], generated, published=totals)
+    assert generated == NOW and raw_ok and snap_ok
+    assert raw_text.split("RESULTS", 1)[1] == snap_text.split("RESULTS", 1)[1]          # every result line identical
+    assert "3 batches, 0 not 2xx" in snap_text and "event log isn't published" in snap_text
+
+
+def test_no_data_is_refused_not_passed(tmp_path, monkeypatch):
+    import sys
+    import pytest
+    from uninvited import report as r
+    monkeypatch.setattr(sys, "argv", ["report", "--data", str(tmp_path / "missing")])
+    with pytest.raises(SystemExit) as e:
+        r.main()
+    assert "no controller data" in str(e.value)
