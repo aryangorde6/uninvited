@@ -188,7 +188,7 @@
    "bans": 1,
    "came_back_hours": null,
    "country": "RO",
-   "dropped": 191,
+   "dropped": 192,
    "first_catch": 1795695992.1,
    "first_server": "server-ap-southeast-1-30",
    "id": "ip-2b8ae27562f38471a104",
@@ -213,7 +213,7 @@
   {
    "arm": "control",
    "asn": 209242,
-   "attempts": 1137,
+   "attempts": 1139,
    "ban_seconds": 0,
    "bans": 0,
    "came_back_hours": null,
@@ -233,7 +233,7 @@
    "bans": 1,
    "came_back_hours": null,
    "country": "RO",
-   "dropped": 54,
+   "dropped": 192,
    "first_catch": 1795702688.4,
    "first_server": "server-eu-north-1-43",
    "id": "ip-a69f3ec93b9606f52aac",
@@ -243,7 +243,7 @@
   {
    "arm": "control",
    "asn": 4811,
-   "attempts": 402,
+   "attempts": 1086,
    "ban_seconds": 0,
    "bans": 0,
    "came_back_hours": null,
@@ -253,6 +253,96 @@
    "first_server": "server-us-east-1-1",
    "id": "ip-a2afe75b633d8d670b7a",
    "net": "net-beaa3ce3e285",
+   "window": "not started"
+  },
+  {
+   "arm": "control",
+   "asn": 42610,
+   "attempts": 8,
+   "ban_seconds": 0,
+   "bans": 0,
+   "came_back_hours": null,
+   "country": "RU",
+   "dropped": 0,
+   "first_catch": 1795706274.0,
+   "first_server": "server-ap-southeast-1-30",
+   "id": "ip-7ee8b8e70926f83ed91a",
+   "net": "net-eaa8e1bd31c7",
+   "window": "not started"
+  },
+  {
+   "arm": "control",
+   "asn": 198364,
+   "attempts": 70,
+   "ban_seconds": 0,
+   "bans": 0,
+   "came_back_hours": null,
+   "country": "RO",
+   "dropped": 0,
+   "first_catch": 1795706390.3,
+   "first_server": "server-us-east-2-32",
+   "id": "ip-b40bc18837a2975b62d0",
+   "net": "net-e35edc3fd70d",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_10m",
+   "asn": 140292,
+   "attempts": 0,
+   "ban_seconds": 600,
+   "bans": 1,
+   "came_back_hours": null,
+   "country": "CN",
+   "dropped": 6,
+   "first_catch": 1795706540.5,
+   "first_server": "server-eu-west-1-38",
+   "id": "ip-0257e7b3402b230d99da",
+   "net": "net-bd17c8d42141",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_10m",
+   "asn": 12714,
+   "attempts": 0,
+   "ban_seconds": 600,
+   "bans": 1,
+   "came_back_hours": null,
+   "country": "RU",
+   "dropped": 6,
+   "first_catch": 1795706594.0,
+   "first_server": "server-eu-central-1-18",
+   "id": "ip-3e7db09321f20996c65e",
+   "net": "net-8508590f7894",
+   "window": "not started"
+  },
+  {
+   "arm": "control",
+   "asn": 9808,
+   "attempts": 1,
+   "ban_seconds": 0,
+   "bans": 0,
+   "came_back_hours": null,
+   "country": "CN",
+   "dropped": 0,
+   "first_catch": 1795710106.1,
+   "first_server": "server-ap-northeast-1-44",
+   "id": "ip-86158cf948860a1c6217",
+   "net": "net-30a7007cecd2",
+   "window": "not started"
+  },
+  {
+   "arm": "control",
+   "asn": 198364,
+   "attempts": 45,
+   "ban_seconds": 0,
+   "bans": 0,
+   "came_back_hours": null,
+   "country": "RO",
+   "dropped": 0,
+   "first_catch": 1795711423.3,
+   "first_server": "server-ap-southeast-1-7",
+   "id": "ip-772d3c3aa79e34a1927b",
+   "net": "net-e35edc3fd70d",
    "window": "not started"
   }
  ],
@@ -276,13 +366,13 @@
  },
  "gate": {
   "pass": true,
-  "text": "INTEGRITY GATE\n  [PASS] sample ratio (34/33/33): {'control': 8, 'ban_10m': 4, 'ban_12h': 5}, p = 0.501\n  [PASS] no unknown arm values: 0 attackers with a value outside 0/600/43200\n  [PASS] came_back: log matches state: 0 logged, 0 in state\n  [PASS] every event batch accepted by Flagsmith: 17 batches, 0 not 2xx\n  [----] Flagsmith comparison skipped (no --flagsmith file)\n  [info] A/A noise floor (control, even vs odd identity): 0/0 vs 0/0, p = 1.00\n\nGATE: PASS\n\nRESULTS (only attackers whose window has closed: 0 of 17)\n\nPrimary: one unit per address\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back\n\nRobustness: one unit per /24\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back\n\nRobustness: one unit per network operator (ASN)\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back"
+  "text": "INTEGRITY GATE\n  [PASS] sample ratio (34/33/33): {'control': 12, 'ban_10m': 6, 'ban_12h': 5}, p = 0.178\n  [PASS] no unknown arm values: 0 attackers with a value outside 0/600/43200\n  [PASS] came_back: log matches state: 0 logged, 0 in state\n  [PASS] every event batch accepted by Flagsmith: 23 batches, 0 not 2xx\n  [----] Flagsmith comparison skipped (no --flagsmith file)\n  [info] A/A noise floor (control, even vs odd identity): 0/0 vs 0/0, p = 1.00\n\nGATE: PASS\n\nRESULTS (only attackers whose window has closed: 0 of 23)\n\nPrimary: one unit per address\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back\n\nRobustness: one unit per /24\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back\n\nRobustness: one unit per network operator (ASN)\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back"
  },
- "generated": 1795703772.6,
- "last_heartbeat": 1795703688.7,
+ "generated": 1795711639.5,
+ "last_heartbeat": 1795711531.2,
  "servers": [
   {
-   "events": 5,
+   "events": 15,
    "name": "server-ap-northeast-1-44",
    "region": "ap-northeast-1"
   },
@@ -292,12 +382,12 @@
    "region": "ap-northeast-1"
   },
   {
-   "events": 6,
+   "events": 9,
    "name": "server-ap-southeast-1-11",
    "region": "ap-southeast-1"
   },
   {
-   "events": 168,
+   "events": 169,
    "name": "server-ap-southeast-1-15",
    "region": "ap-southeast-1"
   },
@@ -307,47 +397,47 @@
    "region": "ap-southeast-1"
   },
   {
-   "events": 4,
+   "events": 6,
    "name": "server-ap-southeast-1-23",
    "region": "ap-southeast-1"
   },
   {
-   "events": 1094,
+   "events": 1153,
    "name": "server-ap-southeast-1-27",
    "region": "ap-southeast-1"
   },
   {
-   "events": 3,
+   "events": 12,
    "name": "server-ap-southeast-1-3",
    "region": "ap-southeast-1"
   },
   {
-   "events": 202,
+   "events": 216,
    "name": "server-ap-southeast-1-30",
    "region": "ap-southeast-1"
   },
   {
-   "events": 2,
+   "events": 39,
    "name": "server-ap-southeast-1-7",
    "region": "ap-southeast-1"
   },
   {
-   "events": 3,
+   "events": 7,
    "name": "server-ap-southeast-2-46",
    "region": "ap-southeast-2"
   },
   {
-   "events": 2,
+   "events": 5,
    "name": "server-ap-southeast-2-47",
    "region": "ap-southeast-2"
   },
   {
-   "events": 11,
+   "events": 15,
    "name": "server-ca-central-1-36",
    "region": "ca-central-1"
   },
   {
-   "events": 10,
+   "events": 11,
    "name": "server-ca-central-1-37",
    "region": "ca-central-1"
   },
@@ -357,22 +447,22 @@
    "region": "eu-central-1"
   },
   {
-   "events": 131,
+   "events": 133,
    "name": "server-eu-central-1-14",
    "region": "eu-central-1"
   },
   {
-   "events": 256,
+   "events": 268,
    "name": "server-eu-central-1-18",
    "region": "eu-central-1"
   },
   {
-   "events": 21,
+   "events": 23,
    "name": "server-eu-central-1-2",
    "region": "eu-central-1"
   },
   {
-   "events": 81,
+   "events": 83,
    "name": "server-eu-central-1-22",
    "region": "eu-central-1"
   },
@@ -382,57 +472,57 @@
    "region": "eu-central-1"
   },
   {
-   "events": 6,
+   "events": 8,
    "name": "server-eu-central-1-6",
    "region": "eu-central-1"
   },
   {
-   "events": 3,
+   "events": 6,
    "name": "server-eu-north-1-42",
    "region": "eu-north-1"
   },
   {
-   "events": 66,
+   "events": 207,
    "name": "server-eu-north-1-43",
    "region": "eu-north-1"
   },
   {
-   "events": 2,
+   "events": 13,
    "name": "server-eu-west-1-38",
    "region": "eu-west-1"
   },
   {
-   "events": 9,
+   "events": 10,
    "name": "server-eu-west-1-39",
    "region": "eu-west-1"
   },
   {
-   "events": 13,
+   "events": 16,
    "name": "server-eu-west-2-40",
    "region": "eu-west-2"
   },
   {
-   "events": 3,
+   "events": 4,
    "name": "server-eu-west-2-41",
    "region": "eu-west-2"
   },
   {
-   "events": 3,
+   "events": 10,
    "name": "server-sa-east-1-48",
    "region": "sa-east-1"
   },
   {
-   "events": 402,
+   "events": 1124,
    "name": "server-us-east-1-1",
    "region": "us-east-1"
   },
   {
-   "events": 60,
+   "events": 61,
    "name": "server-us-east-1-13",
    "region": "us-east-1"
   },
   {
-   "events": 59,
+   "events": 60,
    "name": "server-us-east-1-17",
    "region": "us-east-1"
   },
@@ -442,12 +532,12 @@
    "region": "us-east-1"
   },
   {
-   "events": 3,
+   "events": 4,
    "name": "server-us-east-1-25",
    "region": "us-east-1"
   },
   {
-   "events": 2,
+   "events": 3,
    "name": "server-us-east-1-29",
    "region": "us-east-1"
   },
@@ -457,12 +547,12 @@
    "region": "us-east-1"
   },
   {
-   "events": 121,
+   "events": 125,
    "name": "server-us-east-1-9",
    "region": "us-east-1"
   },
   {
-   "events": 4,
+   "events": 87,
    "name": "server-us-east-2-32",
    "region": "us-east-2"
   },
@@ -472,7 +562,7 @@
    "region": "us-east-2"
   },
   {
-   "events": 2,
+   "events": 3,
    "name": "server-us-west-1-34",
    "region": "us-west-1"
   },
@@ -482,27 +572,27 @@
    "region": "us-west-1"
   },
   {
-   "events": 100,
+   "events": 106,
    "name": "server-us-west-2-12",
    "region": "us-west-2"
   },
   {
-   "events": 61,
+   "events": 63,
    "name": "server-us-west-2-16",
    "region": "us-west-2"
   },
   {
-   "events": 52,
+   "events": 60,
    "name": "server-us-west-2-20",
    "region": "us-west-2"
   },
   {
-   "events": 79,
+   "events": 80,
    "name": "server-us-west-2-24",
    "region": "us-west-2"
   },
   {
-   "events": 2,
+   "events": 9,
    "name": "server-us-west-2-28",
    "region": "us-west-2"
   },
@@ -517,23 +607,23 @@
    "region": "us-west-2"
   },
   {
-   "events": 36,
+   "events": 54,
    "name": "server-us-west-2-8",
    "region": "us-west-2"
   }
  ],
  "totals": {
-  "ban_replies_ok": 552,
+  "ban_replies_ok": 648,
   "ban_replies_other": 0,
-  "dropped": 674,
-  "enrolled": 17,
-  "event_batches": 17,
+  "dropped": 825,
+  "enrolled": 23,
+  "event_batches": 23,
   "event_batches_not_2xx": 0,
   "per_arm": {
    "ban_10m": {
     "came_back": 0,
     "closed": 0,
-    "enrolled": 4
+    "enrolled": 6
    },
    "ban_12h": {
     "came_back": 0,
@@ -543,7 +633,7 @@
    "control": {
     "came_back": 0,
     "closed": 0,
-    "enrolled": 8
+    "enrolled": 12
    }
   }
  }
