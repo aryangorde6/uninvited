@@ -24,7 +24,7 @@ import urllib.request
 PROFILE = "hackathon"
 HOME_REGION = "eu-central-1"
 REGIONS = ["us-east-1", "eu-central-1", "ap-southeast-1", "us-west-2"]   # not Mumbai, so the budget counts only Uninvited
-MAX_SERVERS = 12
+MAX_SERVERS = 24                 # raised from 12 on 26 Nov (Aryan's OK): attack volume was near zero
 TYPES = {"server": "t4g.nano", "controller": "t4g.micro"}
 AMI_PARAM = "/aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id"
 TAG = "uninvited"

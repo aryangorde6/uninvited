@@ -30,12 +30,49 @@
 
 ## Setup
 
-_Being written: environment variables, the run command and what you should see._
+**You need:** an AWS account with the AWS CLI (profile `hackathon`, or change `PROFILE` in `fleet/launch.py`) and a cost budget with alerts that does not subtract credits (the launcher refuses to start anything without one); a Flagsmith account (the free Cloud plan works) with its managed warehouse turned on; Python 3.10+ and [uv](https://docs.astral.sh/uv/).
 
+**1. Flagsmith** (one environment):
+- multivariate flag `ban_policy`: control value `0`, variations `ban_10m` = `600` and `ban_12h` = `43200`, each with a label;
+- flag `ban_enforce`, off;
+- metric `came_back`: occurrence, lower is better, event name `came_back`;
+- a server-side environment key, saved to a file only you can read.
+
+**2. Your admin key:** `ssh-keygen -t ed25519 -f ~/.ssh/uninvited_admin`, then copy the `.pub` file to `data/pubkeys/admin.pub` (`data/` is git-ignored). Pick an admin port `PORT` (1025–65535); it is opened only to your address.
+
+**3. The controller:**
 ```bash
 uv venv && uv pip install -e . pytest
+.venv/bin/python fleet/launch.py check                              # read-only: budget found, what exists
+.venv/bin/python fleet/launch.py controller --spend-ok --admin-port PORT
+```
+Copy this repository to `/opt/uninvited` on the controller and run `sudo sh /opt/uninvited/fleet/controller-setup.sh`. It makes the two limited SSH keys and the hashing key on the controller (no private key leaves it) and prints the two public keys: save them as `data/pubkeys/log.pub` and `data/pubkeys/ban.pub`.
+
+**4. The servers:**
+```bash
+.venv/bin/python fleet/launch.py servers 12 --spend-ok --admin-port PORT   # spread over four regions
+.venv/bin/python fleet/hostkeys.py                                          # host keys from AWS console output
+.venv/bin/python fleet/password_check.py HOST                               # each server: expect "PASS: every pair refused"
+```
+
+**5. Start the controller:** on the controller, write `/etc/uninvited/controller.env` from `fleet/controller.env.example`, the server list `/etc/uninvited/fleet.json` (`name`, `host`, `port` per server, from `data/fleet.json`), their host keys `/etc/uninvited/ssh/known_hosts` (from `data/known_hosts`) and the Flagsmith key file, then `sudo systemctl enable --now uninvited-controller`.
+
+**6. Start the experiment:** create the experiment on `ban_policy` in Flagsmith (rollout 100%, primary metric `came_back`), then turn `ban_enforce` on. Nobody is enrolled outside `UNINVITED_ENROL_FROM`–`UNINVITED_ENROL_UNTIL`.
+
+**What you should see** in `/var/lib/uninvited/events.jsonl`: `controller_start`, one `stream_up` per server, `kill_switch` with `"enforcing": true`, and a `health` line every 5 minutes with events per server. When an attacker is caught inside the window: `enrolled` (hashed identity, arm, hashed /24, ASN, country), `banned`, one `ban_reply` per server, and 12–24 hours later perhaps `came_back`. In Flagsmith, the experiment's exposures rise with each enrolment.
+
+**Check and analyse** (the integrity gate first, then the results):
+```bash
+cd /opt/uninvited && sudo python3 -m uninvited.report --data /var/lib/uninvited   # on the controller
+python3 -m uninvited.report --data DIR --flagsmith flagsmith.json              # with Flagsmith's numbers per arm
+```
+
+**Tests:**
+```bash
 .venv/bin/python -m pytest
 ```
+
+**Stop:** `.venv/bin/python fleet/launch.py stop` stops (does not delete) every instance; each one also powers itself off after 4 days.
 
 ## Before the hackathon / during the hackathon
 

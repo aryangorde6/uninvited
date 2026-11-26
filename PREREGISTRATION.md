@@ -55,3 +55,5 @@ A throwaway test on 25–26 Nov with made-up identities (not in this repository)
 ---
 
 _Changes after the start, if any, go here with their date and reason._
+
+- **Thu 26 Nov 2026, ~2:08 PM IST: 24 servers instead of 12.** Attack volume was near zero: in the fleet's first ~75 minutes, 11 of the 12 servers saw 0–2 outside addresses each, and only one address made five or more attempts. The plan allowed new servers to join if volume was low (the arms can't change). So 12 more servers from the same template, three more in each of the four regions, were launched between 1:52 and 1:58 PM, passed the same checks (accounts locked, root login off, common passwords refused, firewall table loaded, ban link tested), and joined the controller at about 2:08 PM. The arms, the split, the catch rule, the metric window, the enrolment dates and the analysis are unchanged; a catch or a return now counts on any of the 24 servers, and a ban applies on all 24. The controller was restarted to add them; no attacker had been enrolled before the restart.

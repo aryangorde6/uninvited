@@ -21,8 +21,11 @@ WINDOW_END = 24 * 3600 + 300                                         # a window 
 
 
 def load(data_dir):
-    with open(os.path.join(data_dir, "state.json")) as f:
-        attackers = json.load(f)
+    attackers = {}
+    path = os.path.join(data_dir, "state.json")
+    if os.path.exists(path):                     # no file until the first enrolment
+        with open(path) as f:
+            attackers = json.load(f)
     events = []
     path = os.path.join(data_dir, "events.jsonl")
     if os.path.exists(path):
