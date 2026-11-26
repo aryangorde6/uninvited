@@ -1,0 +1,22 @@
+[Unit]
+Description=Uninvited controller (follows the fleet's SSH logs, bans, talks to Flagsmith)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=uninvited
+Group=uninvited
+EnvironmentFile=/etc/uninvited/controller.env
+WorkingDirectory=/opt/uninvited
+# not -I: python -m must find the package in WorkingDirectory, which is root-owned and read-only to this user
+ExecStart=/opt/uninvited/.venv/bin/python -m uninvited.controller
+Restart=always
+RestartSec=10
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/var/lib/uninvited
+
+[Install]
+WantedBy=multi-user.target

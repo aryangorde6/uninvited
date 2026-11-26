@@ -1,0 +1,12 @@
+[project]
+name = "uninvited"
+version = "0.1.0"
+description = "A/B test SSH ban lengths on real attackers with Flagsmith Experimentation"
+requires-python = ">=3.12"
+dependencies = ["flagsmith==6.7.0"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,16 @@
+#!/usr/bin/python3 -I
+"""Runs on each server as the controller's log key's only command.
+
+It streams sshd's log and the firewall's drop log as JSON, starting after a journal
+cursor if the controller sends a valid one (so nothing is lost across reconnects).
+The cursor is the only input, and it must match a strict pattern.
+"""
+import os
+import re
+
+CURSOR = re.compile(r"[a-z]=[0-9a-f]{1,64}(?:;[a-z]=[0-9a-f]{1,64}){0,9}")
+MATCHES = ["_SYSTEMD_UNIT=ssh.service", "+", "_TRANSPORT=kernel"]
+
+cursor = os.environ.get("SSH_ORIGINAL_COMMAND", "")
+start = [f"--after-cursor={cursor}"] if CURSOR.fullmatch(cursor) else ["--lines=0"]
+os.execv("/usr/bin/journalctl", ["journalctl", "--follow", "--output=json", *start, *MATCHES])

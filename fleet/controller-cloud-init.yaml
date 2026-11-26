@@ -1,0 +1,19 @@
+#cloud-config
+# The controller: no port 22, admin key only, on the admin port. Filled in by fleet/render.py.
+package_update: true
+packages: [python3-venv]
+ssh_pwauth: false
+ssh_authorized_keys:
+  - {{ADMIN_PUBKEY}}
+write_files:
+  - path: /etc/ssh/sshd_config.d/10-uninvited.conf
+    content: |
+      Port {{ADMIN_PORT}}
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+      PermitRootLogin no
+runcmd:
+  - [systemctl, disable, --now, ssh.socket]
+  - [systemctl, enable, ssh.service]
+  - [systemctl, restart, ssh.service]
+  - [shutdown, -h, '+5760', 'Uninvited: planned power-off after 4 days']

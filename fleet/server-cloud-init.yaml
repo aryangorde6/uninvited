@@ -1,0 +1,76 @@
+#cloud-config
+# One attack server. fleet/render.py fills in the placeholders.
+package_update: true
+packages: [nftables]
+ssh_pwauth: true
+ssh_authorized_keys:
+  - {{ADMIN_PUBKEY}}
+users:
+  - default
+  - name: uninvited-log
+    lock_passwd: true
+    shell: /bin/sh
+    groups: [systemd-journal]
+    ssh_authorized_keys:
+      - 'restrict,from="{{CONTROLLER_IP}}",command="/usr/local/sbin/uninvited-log" {{LOG_PUBKEY}}'
+  - name: uninvited-ban
+    lock_passwd: true
+    shell: /bin/sh
+    ssh_authorized_keys:
+      - 'restrict,from="{{CONTROLLER_IP}}",command="sudo -n /usr/bin/setpriv --reuid=nobody --regid=nogroup --clear-groups --inh-caps=-all,+net_admin --ambient-caps=-all,+net_admin --bounding-set=-all,+net_admin --no-new-privs /usr/bin/python3 -I /usr/local/sbin/uninvited-ban" {{BAN_PUBKEY}}'
+write_files:
+  # read before Ubuntu's own files (first value wins): port 22 shows a password prompt nobody can pass
+  - path: /etc/ssh/sshd_config.d/10-uninvited.conf
+    content: |
+      Port 22
+      Port {{ADMIN_PORT}}
+      PasswordAuthentication yes
+      KbdInteractiveAuthentication no
+      PermitRootLogin no
+      PermitEmptyPasswords no
+      PubkeyAuthentication yes
+  - path: /etc/uninvited/never-ban
+    content: |
+      {{NEVER_BAN_LINES}}
+  - path: /etc/uninvited/uninvited.nft
+    encoding: b64
+    content: {{NFT_B64}}
+  - path: /usr/local/sbin/uninvited-ban
+    permissions: '0755'
+    encoding: b64
+    content: {{BAN_B64}}
+  - path: /usr/local/sbin/uninvited-log
+    permissions: '0755'
+    encoding: b64
+    content: {{LOG_B64}}
+  - path: /etc/sudoers.d/uninvited-ban
+    permissions: '0440'
+    content: |
+      uninvited-ban ALL=(root) NOPASSWD: /usr/bin/setpriv --reuid=nobody --regid=nogroup --clear-groups --inh-caps=-all\,+net_admin --ambient-caps=-all\,+net_admin --bounding-set=-all\,+net_admin --no-new-privs /usr/bin/python3 -I /usr/local/sbin/uninvited-ban
+  - path: /etc/systemd/system/uninvited-firewall.service
+    content: |
+      [Unit]
+      Description=Uninvited firewall table (bans expire by themselves)
+      After=network-pre.target
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      ExecStart=/usr/sbin/nft -f /etc/uninvited/uninvited.nft
+      [Install]
+      WantedBy=multi-user.target
+  - path: /etc/systemd/journald.conf.d/uninvited.conf
+    content: |
+      [Journal]
+      Storage=persistent
+      SystemMaxUse=1G
+runcmd:
+  - [sh, -c, 'for u in $(cut -d: -f1 /etc/passwd); do passwd -l "$u" >/dev/null 2>&1 || true; done']
+  - [systemctl, restart, systemd-journald]
+  - [systemctl, daemon-reload]
+  - [systemctl, enable, --now, uninvited-firewall.service]
+  # Ubuntu 24.04 starts sshd from a socket that ignores Port lines; run the plain service instead
+  - [systemctl, disable, --now, ssh.socket]
+  - [systemctl, enable, ssh.service]
+  - [systemctl, restart, ssh.service]
+  # a dead-man stop on spending: the server powers itself off after 4 days whatever happens
+  - [shutdown, -h, '+5760', 'Uninvited: planned power-off after 4 days']

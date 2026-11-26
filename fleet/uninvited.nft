@@ -1,0 +1,26 @@
+# The firewall table for Uninvited. Loaded at boot; NEVER_BAN is filled in by cloud-init.
+table inet uninvited {
+    # bans set by the controller; each address expires by itself
+    set banned {
+        type ipv4_addr
+        flags timeout
+        size 65535
+    }
+    set never_ban {
+        type ipv4_addr
+        elements = { NEVER_BAN }
+    }
+    # one log line per minute per banned address, so "came back" is seen even during a ban
+    set drop_log {
+        type ipv4_addr
+        flags dynamic, timeout
+        timeout 2m
+        size 65535
+    }
+    chain input {
+        type filter hook input priority -10; policy accept;
+        ip saddr @never_ban accept
+        ip saddr @banned tcp dport 22 add @drop_log { ip saddr limit rate 1/minute } log prefix "uninvited-drop: " level info
+        ip saddr @banned tcp dport 22 drop
+    }
+}
