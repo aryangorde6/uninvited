@@ -1,4 +1,4 @@
-from uninvited.rules import MAX_BAN, CatchRule, Window, ban_seconds, identity, never_ban
+from uninvited.rules import MAX_BAN, CatchRule, Window, ban_seconds, identity, network, never_ban
 from uninvited.sshlog import Event
 
 
@@ -70,3 +70,13 @@ def test_window_opens_after_the_longest_ban():
     w = Window()
     assert not w.contains(0, 12 * 3600 + 299) and w.contains(0, 12 * 3600 + 300)
     assert w.contains(0, 24 * 3600 + 299) and not w.contains(0, 24 * 3600 + 300)
+
+
+def test_network_hash_groups_a_slash_24_and_hides_it():
+    key = b"k" * 32
+    same = network("81.2.69.142", key) == network("81.2.69.7", key)
+    other = network("81.2.70.142", key)
+    assert same and other != network("81.2.69.142", key)
+    assert network("81.2.69.142", key).startswith("net-")
+    assert network("81.2.69.142", key) != network("81.2.69.142", b"j" * 32)
+    assert network("81.2.69.142", key)[4:] not in identity("81.2.69.0", key)

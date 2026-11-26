@@ -7,7 +7,7 @@ import json
 import os
 from dataclasses import asdict, dataclass
 
-from .rules import CatchRule, Window, ban_seconds, identity, never_ban
+from .rules import CatchRule, Window, ban_seconds, identity, network, never_ban
 
 
 @dataclass
@@ -17,6 +17,9 @@ class Attacker:
     first_catch: float
     first_vm: str
     came_back_at: float = 0.0
+    net: str = ""         # keyed hash of the /24 (see rules.network)
+    asn: int = 0          # network operator at enrolment (0 = unknown); no address is kept
+    country: str = ""
 
 
 class State:
@@ -48,11 +51,12 @@ def single_instance(lock_path):
 
 class Service:
     def __init__(self, *, state, flags, ban, log, hash_key, protected,
-                 enrol_from, enrol_until, max_enrolled=5000, window=None, catch_rule=None):
+                 enrol_from, enrol_until, max_enrolled=5000, window=None, catch_rule=None, asn=None):
         self.state, self.flags, self.ban, self.log = state, flags, ban, log
         self.hash_key, self.protected = hash_key, set(protected)
         self.enrol_from, self.enrol_until, self.max_enrolled = enrol_from, enrol_until, max_enrolled
         self.window = window or Window()
+        self.asn = asn or (lambda ip: (0, ""))
         self.catches = catch_rule or CatchRule()
 
     def handle(self, vm, ev):
@@ -89,10 +93,16 @@ class Service:
             if value is None:
                 self.log({"t": ev.ts, "what": "catch_not_in_experiment", "vm": vm, "id": ident})
                 return
-            who = Attacker(arm=str(value), seconds=ban_seconds(value), first_catch=ev.ts, first_vm=vm)
+            try:
+                asn, country = self.asn(ev.ip)
+            except Exception:                         # never let the lookup stop an enrolment
+                asn, country = 0, ""
+            who = Attacker(arm=str(value), seconds=ban_seconds(value), first_catch=ev.ts, first_vm=vm,
+                           net=network(ev.ip, self.hash_key), asn=asn, country=country)
             self.state.attackers[ident] = who
             self.state.save()
-            self.log({"t": ev.ts, "what": "enrolled", "vm": vm, "id": ident, "arm": who.arm})
+            self.log({"t": ev.ts, "what": "enrolled", "vm": vm, "id": ident, "arm": who.arm, "net": who.net,
+                      "asn": who.asn, "country": who.country})
 
         if who.seconds > 0 and enforcing:
             self.ban(ev.ip, who.seconds, ev.ts)

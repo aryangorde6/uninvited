@@ -72,6 +72,13 @@ def identity(ip, key):
     return "ip-" + hmac.new(key, ip.encode(), hashlib.sha256).hexdigest()[:20]
 
 
+def network(ip, key):
+    """A keyed hash of the IP's /24, for the pre-registered rerun with one unit per network.
+    Kept so the network survives without storing any address or prefix."""
+    net = ipaddress.IPv4Network(f"{ip}/24", strict=False)
+    return "net-" + hmac.new(key, b"net24:" + str(net).encode(), hashlib.sha256).hexdigest()[:12]
+
+
 def never_ban(ip, protected):
     """True for the admin's and controller's addresses and for every non-public range."""
     addr = ipaddress.IPv4Address(ip)

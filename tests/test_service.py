@@ -1,4 +1,4 @@
-from uninvited.rules import identity
+from uninvited.rules import identity, network
 from uninvited.service import Service, State
 from uninvited.sshlog import Event
 
@@ -45,6 +45,8 @@ def test_catch_enrols_once_and_bans_for_the_arm(tmp_path):
     attack(svc, IP, 1000, vm="vm2")                      # caught again later: same arm, no second evaluation
     assert flags.assigned == [ID] and bans == [(IP, 600), (IP, 600)]
     assert svc.state.attackers[ID].first_vm == "vm1"
+    assert svc.state.attackers[ID].net == network(IP, KEY)
+    assert State(str(tmp_path / "state.json")).attackers[ID].net == network(IP, KEY)   # survives a restart
 
 
 def test_no_ban_arm_and_cap(tmp_path):

@@ -15,6 +15,7 @@ from datetime import datetime
 
 from flagsmith import Flagsmith
 
+from .asn import AsnTable, no_table
 from .rules import Window
 from .service import Service, State, single_instance
 from .sshlog import parse_journal_line
@@ -160,6 +161,7 @@ def config():
         "enrol_from": datetime.fromisoformat(env["UNINVITED_ENROL_FROM"]).timestamp(),
         "enrol_until": datetime.fromisoformat(env["UNINVITED_ENROL_UNTIL"]).timestamp(),
         "window": Window(hours * 3600 + 300, 2 * hours * 3600 + 300),
+        "asn_table": env.get("UNINVITED_ASN_TABLE", ""),           # ip2asn-v4-u32.tsv.gz; optional
     }
 
 
@@ -180,6 +182,14 @@ def main():
     urllib3_log.addHandler(EventPosts(log))
 
     flags = Flags(cfg["flagsmith_key"], log)
+    asn = no_table
+    if cfg["asn_table"]:
+        try:
+            asn = AsnTable(cfg["asn_table"])
+        except (OSError, ValueError, EOFError) as e:      # run without it rather than not at all
+            log({"t": time.time(), "what": "asn_table_error", "error": type(e).__name__})
+    log({"t": time.time(), "what": "asn_table", "loaded": asn is not no_table,
+         "ranges": len(asn.starts) if asn is not no_table else 0})
     with open(cfg["fleet"]) as f:
         fleet = json.load(f)
     channels = [BanChannel(vm, cfg, log) for vm in fleet]
@@ -190,7 +200,7 @@ def main():
 
     service = Service(state=State(os.path.join(cfg["data"], "state.json")), flags=flags, ban=ban, log=log,
                       hash_key=cfg["hash_key"], protected=cfg["protected"], enrol_from=cfg["enrol_from"],
-                      enrol_until=cfg["enrol_until"], window=cfg["window"])
+                      enrol_until=cfg["enrol_until"], window=cfg["window"], asn=asn)
 
     cursor_path = os.path.join(cfg["data"], "cursors.json")
     cursors = json.load(open(cursor_path)) if os.path.exists(cursor_path) else {}
@@ -212,6 +222,7 @@ def main():
                 counts[name] += 1
             if cursor:
                 cursors[name] = cursor
+            flags.enforcing()                  # read the kill switch even when nobody is caught (self-throttled)
             now = time.time()
             if now - last_flush >= 60:         # send buffered came_back events (same thread as track_event)
                 flags.fs.flush_events()
@@ -222,7 +233,8 @@ def main():
                 os.replace(cursor_path + ".tmp", cursor_path)
                 last_save = now
             if now - last_health >= 300:       # a heartbeat per server: a silent stream shows up here
-                log({"t": now, "what": "health", "events_5min": counts, "enrolled": len(service.state.attackers)})
+                log({"t": now, "what": "health", "events_5min": counts, "enrolled": len(service.state.attackers),
+                     "enforcing": flags.enforcing()})
                 counts, last_health = {k: 0 for k in counts}, now
     finally:
         flags.fs.flush_events()

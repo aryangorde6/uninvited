@@ -26,7 +26,7 @@
 - **Servers** run stock OpenSSH on port 22 with a password prompt nobody can pass (every password is locked). A small firewall table holds bans that expire by themselves.
 - **One controller** holds every key. It follows each server's SSH log over SSH (a key that can only stream the log) and sends bans back (a key that can only run a ban script that accepts `ban <IPv4> <seconds>`).
 - **A catch** is five failed logins within ten minutes from one IP on one server, as fail2ban counts them.
-- IPs are stored only as keyed hashes. Usernames that attackers type are never stored or shown.
+- IPs are stored only as keyed hashes (plus a keyed hash of the /24, and the network operator's ASN and country, looked up once at enrolment). Usernames that attackers type are never stored or shown.
 
 ## Setup
 
@@ -45,6 +45,7 @@ uv venv && uv pip install -e . pytest
 ## Credits
 
 - [OpenSSH](https://www.openssh.com/), [nftables](https://netfilter.org/projects/nftables/), the [Flagsmith Python SDK](https://github.com/Flagsmith/flagsmith-python-client).
+- Network operator and country at enrolment: [iptoasn.com](https://iptoasn.com/)'s IP-to-ASN table (public domain, PDDL v1.0).
 - Art: the site's and the video's images were generated with **ChatGPT**, and the short animated clips with Google's **Gemini Omni**, from prompts written for this project.
 
 ## Licence
