@@ -23,8 +23,11 @@ import urllib.request
 
 PROFILE = "hackathon"
 HOME_REGION = "eu-central-1"
-REGIONS = ["us-east-1", "eu-central-1", "ap-southeast-1", "us-west-2"]   # not Mumbai, so the budget counts only Uninvited
-MAX_SERVERS = 24                 # raised from 12 on 26 Nov (Aryan's OK): attack volume was near zero
+REGIONS = ["us-east-1", "eu-central-1", "ap-southeast-1", "us-west-2",   # not Mumbai, so the budget counts only Uninvited
+           # added 26 Nov: AWS allows 8 small servers in each region above and 2 in each region below
+           "us-east-2", "us-west-1", "ca-central-1", "eu-west-1", "eu-west-2", "eu-north-1",
+           "ap-northeast-1", "ap-southeast-2", "sa-east-1"]
+MAX_SERVERS = 48                 # raised 12 -> 24 -> 48 on 26 Nov (Aryan's OK each time): attack volume far below plan
 TYPES = {"server": "t4g.nano", "controller": "t4g.micro"}
 AMI_PARAM = "/aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id"
 TAG = "uninvited"
