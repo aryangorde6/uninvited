@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Uninvited · Method: how the test works</title>
+<meta name="description" content="The pre-registered hypothesis, the three arms, the return window, how Flagsmith runs the experiment, the limits, and how the data is kept safe.">
+<meta property="og:title" content="Uninvited · Method: how the test works">
+<meta property="og:description" content="A pre-registered Flagsmith experiment on real SSH attackers: hypothesis, arms, metric, limits and data ethics.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Uninvited">
+<meta property="og:url" content="https://uninvited.aryangorde.com/method.html">
+<meta property="og:image" content="https://uninvited.aryangorde.com/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Uninvited: a temple gateway with a bouncer at the door and hooded robots queueing on the steps, beside the line: every user in this A/B test is trying to break in.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://uninvited.aryangorde.com/method.html">
+<meta name="theme-color" content="#0a0514">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/uninvited-display.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/app.js" defer></script>
+</head>
+<body data-page="method" data-state="loading">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="band">
+  <picture class="art">
+    <source type="image/avif" srcset="img/mission-640.avif 640w, img/mission-1280.avif 1280w" sizes="100vw">
+    <img src="img/mission-1280.webp" srcset="img/mission-640.webp 640w, img/mission-1280.webp 1280w" sizes="100vw" width="1280" height="720" alt="" fetchpriority="high">
+  </picture>
+  <div class="shade"></div>
+  <div class="bar">
+    <a class="logo" href="./">Uninvited</a>
+    <nav class="nav" aria-label="Pages"><a href="./">Live</a><a href="results.html">Results</a><a href="method.html" aria-current="page">Method</a></nav>
+    <p class="pill" data-fill="pill"><span class="dot"></span><span class="pill-text">Loading…</span></p>
+  </div>
+  <div class="band-text">
+    <p class="mission">Mission 2 · Split the crew</p>
+    <h1>How the test works</h1>
+    <p class="lede">One question, three ban lengths, real attackers, and every rule written down before the first one was caught.</p>
+  </div>
+</header>
+
+<main id="main" class="method">
+  <div class="notice" role="alert"></div>
+  <section class="section" aria-labelledby="hyp-h">
+    <div class="wrap">
+      <h2 id="hyp-h">The hypothesis</h2>
+      <blockquote>Banning an attacker for fail2ban's default 10 minutes does not lower the share who come back 12–24 hours after their first catch, compared with no ban, for attackers first caught between Thu 26 Nov 2026 2:00 PM and Fri 27 Nov 2026 3:00 PM IST.</blockquote>
+      <p class="intro">Written in the pre-registration (<a href="https://github.com/aryangorde6/uninvited/blob/5df9a9542aa64adc4e3a5939fb143389892cac93/PREREGISTRATION.md"><code>PREREGISTRATION.md</code></a>), committed on Thu 26 Nov 2026 at 1:17:41 PM IST (commit <a href="https://github.com/aryangorde6/uninvited/commit/5df9a9542aa64adc4e3a5939fb143389892cac93"><code>5df9a95</code></a>), before enrolment opened at 2:00 PM. The same sentence is in Flagsmith's hypothesis field. Changes made after the start are listed under the line in <a href="https://github.com/aryangorde6/uninvited/blob/main/PREREGISTRATION.md">the current file</a>, each with its date and reason.</p>
+      <div class="timeline">
+        <div><b>Enrolment opens</b><span data-fill="enrol-from">Thu 26 Nov, 2:00 PM IST</span></div>
+        <div><b>Enrolment closes</b><span data-fill="enrol-until">Fri 27 Nov, 3:00 PM IST</span></div>
+        <div><b>Last window closes</b><span data-fill="last-close">Sat 28 Nov, about 3:05 PM IST</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="arms-h">
+    <div class="wrap">
+      <h2 id="arms-h">Three crews</h2>
+      <p class="intro">Flagsmith splits attackers <span data-fill="split">34 / 33 / 33</span> between three values of one flag, <code>ban_policy</code>. The value is the ban length in seconds.</p>
+      <div class="crews">
+        <article class="card none">
+          <picture><source type="image/avif" srcset="img/crew-1-320.avif 320w, img/crew-1-640.avif 640w" sizes="(max-width: 899px) 90vw, 360px"><img src="img/crew-1-320.webp" srcset="img/crew-1-320.webp 320w, img/crew-1-640.webp 640w" sizes="(max-width: 899px) 90vw, 360px" width="640" height="640" alt="" loading="lazy"></picture>
+          <div class="body"><h3>No ban</h3><p>Value <code>0</code>. Caught, recorded, and let go. The baseline every ban is measured against.</p></div>
+        </article>
+        <article class="card m10">
+          <picture><source type="image/avif" srcset="img/crew-2-320.avif 320w, img/crew-2-640.avif 640w" sizes="(max-width: 899px) 90vw, 360px"><img src="img/crew-2-320.webp" srcset="img/crew-2-320.webp 320w, img/crew-2-640.webp 640w" sizes="(max-width: 899px) 90vw, 360px" width="640" height="640" alt="" loading="lazy"></picture>
+          <div class="body"><h3>10-minute ban</h3><p>Value <code>600</code>. fail2ban's default: banned on every server for 10 minutes, and again each time it is caught.</p></div>
+        </article>
+        <article class="card h12">
+          <picture><source type="image/avif" srcset="img/crew-3-320.avif 320w, img/crew-3-640.avif 640w" sizes="(max-width: 899px) 90vw, 360px"><img src="img/crew-3-320.webp" srcset="img/crew-3-320.webp 320w, img/crew-3-640.webp 640w" sizes="(max-width: 899px) 90vw, 360px" width="640" height="640" alt="" loading="lazy"></picture>
+          <div class="body"><h3>12-hour ban</h3><p>Value <code>43200</code>. Banned on every server for 12 hours, and again each time it is caught.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="steps-h">
+    <div class="wrap">
+      <h2 id="steps-h">One attacker, start to finish</h2>
+      <ol class="steps">
+        <li><div><b>Caught</b>Five failed SSH logins within ten minutes from one address on one server: fail2ban's own rule. The servers' password prompts can't be passed; every account is locked.</div></li>
+        <li><div><b>Assigned</b>The controller asks Flagsmith for the attacker's <code>ban_policy</code>, once, using a keyed hash of the address as the identity. Flagsmith picks the arm and records the exposure.</div></li>
+        <li><div><b>Banned everywhere</b>The ban goes to all <span data-fill="servers">48</span> servers in <span data-fill="regions">13</span> regions within seconds, through each server's firewall.</div></li>
+        <li><div><b>Watched</b>12 h 5 min after the first catch, when even the 12-hour ban has ended, the return window opens. It closes at 24 h 5 min.</div></li>
+        <li><div><b>Counted</b>If the address reaches port 22 on any server inside its window, the controller sends <code>came_back</code> to Flagsmith, once.</div></li>
+        <li><div><b>Compared</b>Flagsmith's results page compares the arms; an independent Beta-binomial calculation from the controller's own log checks it.</div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="fs-h">
+    <div class="wrap grid2">
+      <div>
+        <h2 id="fs-h">How Flagsmith is used</h2>
+        <ul>
+          <li><b>The flag holds the policy.</b> <code>ban_policy</code> is a multivariate flag; its value is the ban length every server applies. Without Flagsmith, the servers don't know how long to ban.</li>
+          <li><b>The experiment does the split.</b> Flagsmith assigns each attacker an arm and records the exposure; <code>came_back</code> is the metric (an occurrence, lower is better).</li>
+          <li><b>A kill switch.</b> <code>ban_enforce</code>, read every 30 seconds: when it is off, nobody new is enrolled and no new ban is applied.</li>
+          <li><b>Ship the winner.</b> When the experiment is complete, the winning value goes to everyone through the same flag, and every new catch on every server is banned for that length.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>What counts</h2>
+        <ul>
+          <li><b>The result:</b> the share of attackers who came back inside their window, per arm. Primary comparison: 10-minute ban against no ban.</li>
+          <li><b>The noise floor:</b> the no-ban arm split in two by its identity (an A/A comparison).</li>
+          <li><b>Not in the result:</b> attempts that reached SSH and knocks blocked during a ban. They show what a ban does mechanically, so they are reported apart.</li>
+          <li><b>Robustness:</b> the same comparison with one unit per /24 network and per network operator, because one botnet can control many addresses.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="size-h">
+    <div class="wrap">
+      <h2 id="size-h">How big a difference can it see?</h2>
+      <p class="intro">No pilot ran, so the base rate of returns was unknown in advance. The pre-registration gives the smallest drop in the return rate detectable with 80% power at the 5% level. So far <span data-fill="enrolled">…</span> attackers are enrolled.</p>
+      <div class="table-wrap">
+        <table>
+          <caption class="visually-hidden">Smallest detectable drop, in percentage points, by base rate and attackers per arm</caption>
+          <thead><tr><th scope="col">Base return rate</th><th scope="col" class="r">100 per arm</th><th scope="col" class="r">200 per arm</th><th scope="col" class="r">400 per arm</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">15%</th><td class="r">14 points</td><td class="r">10 points</td><td class="r">7 points</td></tr>
+            <tr><th scope="row">25%</th><td class="r">17 points</td><td class="r">12 points</td><td class="r">9 points</td></tr>
+            <tr><th scope="row">40%</th><td class="r">19 points</td><td class="r">14 points</td><td class="r">10 points</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="limits-h">
+    <div class="wrap grid2">
+      <div>
+        <h2 id="limits-h">Limits</h2>
+        <ul>
+          <li><b>Few attackers.</b> About three were caught an hour on the first afternoon, so a small difference may stay out of reach. A tie is reported as a tie, with the size it can't rule out.</li>
+          <li><b>Botnets.</b> Attackers are not independent: on the first afternoon, 5 of the first 11 came from one network operator. The per-network reruns are there for this.</li>
+          <li><b>Cloud servers only,</b> for about 25 hours of enrolment. Home or office servers may see different attackers.</li>
+          <li><b>One shared address can hide several attackers,</b> and one attacker can switch addresses.</li>
+          <li><b>Not tested:</b> fail2ban's growing bans (<code>bantime.increment</code>) and its repeat-offender jail (<code>recidive</code>), the obvious next arms.</li>
+          <li><b>Servers added during the run</b> (12, then 24, then 48), each noted in the pre-registration. The arms never changed.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Data and ethics</h2>
+        <ul>
+          <li>No address is stored or published. Each attacker is a keyed hash that can't be turned back into an address without the controller's secret key.</li>
+          <li>No password is recorded (the SSH server never logs them), and no username is shown anywhere.</li>
+          <li>Network operator and country come from an offline public-domain table (iptoasn.com).</li>
+          <li>The servers only defend themselves: they ban their own attackers and never reach back.</li>
+          <li>The data on this site is the published, anonymised export; it refuses to write anything that looks like an address.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="try-h">
+    <div class="wrap">
+      <h2 id="try-h">Run it on your server</h2>
+      <p>The <a href="https://github.com/aryangorde6/uninvited#readme">repository's README</a> has the setup steps: the settings, the command to start the controller, and what you should see when it works. With the kill switch <code>ban_enforce</code> off in your own Flagsmith environment, it only watches: nobody is enrolled and nobody is banned.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><b>Data:</b> <a href="data/snapshot.json" download>snapshot.json</a>, generated <span data-fill="generated">…</span>. The site has no backend: every page is drawn from that one file, so the same pages replay the experiment with no key and nothing to install. No address is in it, and no username or password is ever shown.</p>
+  <p>Uninvited, built for Toggle Wars, the Flagsmith hackathon (November 2026). Code, data and pre-registration: <a href="https://github.com/aryangorde6/uninvited">github.com/aryangorde6/uninvited</a>. Art generated with ChatGPT from prompts written for this project. Display type: Ubuntu Sans, under the <a href="fonts/LICENCE.txt">Ubuntu Font Licence</a>.</p>
+</footer>
+</body>
+</html>

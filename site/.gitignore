@@ -1,0 +1,3 @@
+# The site reads data/snapshot.json, which the repo-wide "data/" rule would hide from git.
+# It holds only the anonymised export (no addresses), so it may be committed.
+!data/

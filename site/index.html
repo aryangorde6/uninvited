@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Uninvited · Live: an A/B test on real attackers</title>
+<meta name="description" content="Real SSH attackers on 48 servers, each banned for a length set by a Flagsmith experiment: no ban, fail2ban's 10 minutes, or 12 hours. Who comes back?">
+<meta property="og:title" content="Uninvited: an A/B test on real attackers">
+<meta property="og:description" content="Does fail2ban's 10-minute default ban keep attackers away? A live Flagsmith experiment on real SSH attackers.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Uninvited">
+<meta property="og:url" content="https://uninvited.aryangorde.com/">
+<meta property="og:image" content="https://uninvited.aryangorde.com/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Uninvited: a temple gateway with a bouncer at the door and hooded robots queueing on the steps, beside the line: every user in this A/B test is trying to break in.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://uninvited.aryangorde.com/">
+<meta name="theme-color" content="#0a0514">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/uninvited-display.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/app.js" defer></script>
+</head>
+<body data-page="live" data-state="loading">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hero">
+  <picture class="art">
+    <source media="(max-aspect-ratio: 1/1), (max-width: 899px)" type="image/avif" srcset="img/hero-tall-640.avif 640w, img/hero-tall-941.avif 941w" sizes="100vw" width="941" height="1672">
+    <source media="(max-aspect-ratio: 1/1), (max-width: 899px)" type="image/webp" srcset="img/hero-tall-640.webp 640w, img/hero-tall-941.webp 941w" sizes="100vw" width="941" height="1672">
+    <source type="image/avif" srcset="img/hero-wide-640.avif 640w, img/hero-wide-1280.avif 1280w, img/hero-wide-1669.avif 1669w" sizes="100vw">
+    <img src="img/hero-wide-1280.webp" srcset="img/hero-wide-640.webp 640w, img/hero-wide-1280.webp 1280w, img/hero-wide-1669.webp 1669w" sizes="100vw" width="1669" height="942" fetchpriority="high"
+      alt="A temple gateway guarded by two stone statues, in a neon city of server towers. A bouncer stands in the doorway and hooded robots queue down the steps.">
+  </picture>
+  <div class="shade"></div>
+  <div class="embers"></div>
+
+  <div class="bar">
+    <a class="logo" href="./">Uninvited</a>
+    <nav class="nav" aria-label="Pages"><a href="./" aria-current="page">Live</a><a href="results.html">Results</a><a href="method.html">Method</a></nav>
+    <p class="pill" data-fill="pill"><span class="dot"></span><span class="pill-text">Loading…</span></p>
+  </div>
+
+  <div class="hero-text">
+    <p class="mission">Mission 1 · Catch them</p>
+    <h1>Every user in this A/B test is <em>trying to break in</em></h1>
+    <p class="lede">Real attackers try to log in to our <span data-fill="servers">48</span> servers. A Flagsmith flag sets each one's ban: none, fail2ban's 10 minutes, or 12 hours. Then we count who comes back.</p>
+    <div class="cta"><a class="btn primary" href="#lanes">Watch it live</a><a class="btn ghost" href="results.html">See the results</a></div>
+  </div>
+
+  <div class="hud">
+    <div class="crew none"><div class="label">Crew 1 · No ban</div><div class="big num" data-fill="crew-control">…</div><div class="small" data-fill="crew-control-note">caught</div></div>
+    <div class="crew m10"><div class="label">Crew 2 · 10-min ban</div><div class="big num" data-fill="crew-ban_10m">…</div><div class="small" data-fill="crew-ban_10m-note">caught</div></div>
+    <div class="crew h12"><div class="label">Crew 3 · 12-hour ban</div><div class="big num" data-fill="crew-ban_12h">…</div><div class="small" data-fill="crew-ban_12h-note">caught</div></div>
+    <div class="wire"><div class="label">Latest catches</div><ol data-fill="wire"><li>Loading…</li></ol></div>
+  </div>
+
+  <div class="wanted" hidden aria-hidden="true">
+    <div class="tag" data-fill="w-tag"></div>
+    <div class="meta" data-fill="w-meta"></div>
+    <div data-fill="w-stars"></div>
+    <div class="stamp"></div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="notice" role="alert"></div>
+  <section class="section" id="lanes" aria-labelledby="lanes-h">
+    <div class="wrap">
+      <h2 id="lanes-h">Every attacker, one lane</h2>
+      <p class="intro">Does fail2ban's 10-minute default ban keep attackers away, or does it take 12 hours? Each attacker caught by fail2ban's rule (five failed logins in ten minutes) gets an arm from Flagsmith, is banned on every server for that long, and is watched for a return 12 to 24 hours later, after every ban has ended.</p>
+      <p class="status-line">
+        <span data-fill="phase-text">Loading…</span>
+        <span>Enrolment <b data-fill="enrol-from">…</b> to <b data-fill="enrol-until">…</b></span>
+        <span><b data-fill="enrolled">…</b> caught so far</span>
+        <span>Updated <b data-fill="updated">…</b></span>
+      </p>
+      <div class="legend">
+        <span class="arm"><span class="sw m10"></span>10-minute ban</span>
+        <span class="arm"><span class="sw h12"></span>12-hour ban</span>
+        <span class="arm"><span class="win"></span>Return window, 12 h 5 min to 24 h 5 min</span>
+        <span class="arm"><span class="back"></span>Came back</span>
+        <span class="arm"><span class="now"></span>Now</span>
+      </div>
+      <div data-lanes><p class="empty">Loading the latest snapshot…</p></div>
+      <p class="intro">"Reached SSH" counts login attempts after the catch; "Blocked by ban" counts knocks the firewall dropped during a ban. Both are mechanical, so neither is part of the result. Addresses are never shown: each attacker is a keyed hash, with its network operator (AS number) and country.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="fleet-h">
+    <div class="wrap">
+      <h2 id="fleet-h">The fleet: <span data-fill="servers">48</span> servers in <span data-fill="regions">13</span> regions</h2>
+      <p class="intro">Each square is one server. Brighter means more SSH log events since enrolment opened (<span data-fill="events-total">…</span> in all). A dark square is a quiet server, not a broken one. The controller's last heartbeat: <span data-fill="heartbeat">…</span>.</p>
+      <div class="scale" aria-hidden="true">
+        <span><span class="cell"></span>0</span><span><span class="cell l1"></span>1–9</span><span><span class="cell l2"></span>10–99</span><span><span class="cell l3"></span>100–999</span><span><span class="cell l4"></span>1,000+</span>
+      </div>
+      <div class="regions" data-servers></div>
+      <details>
+        <summary>Events per server, as a table</summary>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Server</th><th scope="col">Region</th><th scope="col" class="r">Events</th></tr></thead>
+          <tbody data-server-rows></tbody>
+        </table></div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><b>Data:</b> <a href="data/snapshot.json" download>snapshot.json</a>, generated <span data-fill="generated">…</span>. The site has no backend: every page is drawn from that one file, so the same pages replay the experiment with no key and nothing to install. No address is in it, and no username or password is ever shown.</p>
+  <p>Uninvited, built for Toggle Wars, the Flagsmith hackathon (November 2026). Code, data and pre-registration: <a href="https://github.com/aryangorde6/uninvited">github.com/aryangorde6/uninvited</a>. Art generated with ChatGPT from prompts written for this project. Display type: Ubuntu Sans, under the <a href="fonts/LICENCE.txt">Ubuntu Font Licence</a>.</p>
+</footer>
+</body>
+</html>
