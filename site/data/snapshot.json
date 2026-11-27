@@ -3,7 +3,7 @@
   {
    "arm": "control",
    "asn": 198364,
-   "attempts": 213,
+   "attempts": 317,
    "ban_seconds": 0,
    "bans": 0,
    "came_back_hours": 20.32,
@@ -13,7 +13,7 @@
    "first_server": "server-eu-central-1-14",
    "id": "ip-88c4c74f6c90e7c0da92",
    "net": "net-e35edc3fd70d",
-   "window": "open"
+   "window": "closed"
   },
   {
    "arm": "control",
@@ -28,7 +28,7 @@
    "first_server": "server-eu-central-1-14",
    "id": "ip-a1b7e2ce44afe129b76f",
    "net": "net-2fd82fe6d391",
-   "window": "open"
+   "window": "closed"
   },
   {
    "arm": "control",
@@ -43,7 +43,7 @@
    "first_server": "server-us-west-2-12",
    "id": "ip-31e33cd89b9b78ce9320",
    "net": "net-e35edc3fd70d",
-   "window": "open"
+   "window": "closed"
   },
   {
    "arm": "ban_10m",
@@ -58,7 +58,7 @@
    "first_server": "server-ap-southeast-1-15",
    "id": "ip-5551c81b84b4676b1498",
    "net": "net-c0e8d84008b5",
-   "window": "open"
+   "window": "closed"
   },
   {
    "arm": "control",
@@ -93,10 +93,10 @@
   {
    "arm": "control",
    "asn": 198364,
-   "attempts": 88,
+   "attempts": 225,
    "ban_seconds": 0,
    "bans": 0,
-   "came_back_hours": null,
+   "came_back_hours": 19.82,
    "country": "RO",
    "dropped": 0,
    "first_catch": 1795688458.5,
@@ -273,10 +273,10 @@
   {
    "arm": "control",
    "asn": 198364,
-   "attempts": 70,
+   "attempts": 250,
    "ban_seconds": 0,
    "bans": 0,
-   "came_back_hours": null,
+   "came_back_hours": 15.34,
    "country": "RO",
    "dropped": 0,
    "first_catch": 1795706390.3,
@@ -373,7 +373,7 @@
    "first_server": "server-ap-southeast-1-7",
    "id": "ip-9232200059b67b52750a",
    "net": "net-e35edc3fd70d",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "ban_10m",
@@ -388,7 +388,7 @@
    "first_server": "server-us-west-1-34",
    "id": "ip-4a7a15ed7802ec3ab9d9",
    "net": "net-377467b228fb",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "control",
@@ -403,7 +403,7 @@
    "first_server": "server-eu-central-1-14",
    "id": "ip-e679089ebcf361cc123d",
    "net": "net-3d6c9e31ecbc",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "ban_10m",
@@ -418,7 +418,7 @@
    "first_server": "server-us-west-1-35",
    "id": "ip-a2dab7298057a99f4918",
    "net": "net-1991d212269d",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "control",
@@ -433,7 +433,7 @@
    "first_server": "server-ap-southeast-1-30",
    "id": "ip-7a77671876a07bc4a658",
    "net": "net-e0a570237a6b",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "control",
@@ -448,7 +448,7 @@
    "first_server": "server-ap-northeast-1-44",
    "id": "ip-92b8f3fc9c3b4f6e2a9b",
    "net": "net-255193d8ed8e",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "ban_10m",
@@ -463,7 +463,7 @@
    "first_server": "server-us-east-1-21",
    "id": "ip-e8c8610500599531f772",
    "net": "net-458230176bd0",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "ban_12h",
@@ -478,7 +478,7 @@
    "first_server": "server-us-west-2-24",
    "id": "ip-150adca79337f33af37f",
    "net": "net-840b16485822",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "ban_10m",
@@ -493,7 +493,7 @@
    "first_server": "server-eu-central-1-14",
    "id": "ip-ccd15a3a546309614c23",
    "net": "net-7f6fa0c07b25",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "ban_12h",
@@ -508,7 +508,7 @@
    "first_server": "server-ap-southeast-2-46",
    "id": "ip-af801f3c08bbad19e0ba",
    "net": "net-6ef8d436d40a",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "control",
@@ -523,7 +523,7 @@
    "first_server": "server-eu-central-1-10",
    "id": "ip-0d2a4abdbe1984b18311",
    "net": "net-b2379bd472ac",
-   "window": "not started"
+   "window": "open"
   },
   {
    "arm": "ban_12h",
@@ -543,12 +543,12 @@
   {
    "arm": "ban_10m",
    "asn": 198364,
-   "attempts": 10,
+   "attempts": 19,
    "ban_seconds": 600,
-   "bans": 2,
+   "bans": 3,
    "came_back_hours": null,
    "country": "RO",
-   "dropped": 60,
+   "dropped": 90,
    "first_catch": 1795730657.7,
    "first_server": "server-us-east-1-5",
    "id": "ip-4e277661a119c7df3d14",
@@ -683,7 +683,7 @@
    "bans": 1,
    "came_back_hours": null,
    "country": "GB",
-   "dropped": 11,
+   "dropped": 15,
    "first_catch": 1795747344.7,
    "first_server": "server-us-east-1-17",
    "id": "ip-bf4381dbabf6e499ab15",
@@ -738,12 +738,12 @@
   {
    "arm": "ban_10m",
    "asn": 198364,
-   "attempts": 0,
+   "attempts": 25,
    "ban_seconds": 600,
-   "bans": 1,
+   "bans": 3,
    "came_back_hours": null,
    "country": "RO",
-   "dropped": 30,
+   "dropped": 83,
    "first_catch": 1795748928.6,
    "first_server": "server-us-east-1-1",
    "id": "ip-ed8964497cfe62c002b9",
@@ -758,7 +758,7 @@
    "bans": 1,
    "came_back_hours": null,
    "country": "RO",
-   "dropped": 179,
+   "dropped": 180,
    "first_catch": 1795750261.1,
    "first_server": "server-ap-southeast-1-23",
    "id": "ip-e0c95dc4ba354d44c5e5",
@@ -818,11 +818,161 @@
    "bans": 1,
    "came_back_hours": null,
    "country": "RO",
-   "dropped": 11,
+   "dropped": 661,
    "first_catch": 1795759581.3,
    "first_server": "server-us-west-2-4",
    "id": "ip-7a1d9f7d85b074d11587",
    "net": "net-fd2854a829fc",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_10m",
+   "asn": 14061,
+   "attempts": 3,
+   "ban_seconds": 600,
+   "bans": 1,
+   "came_back_hours": null,
+   "country": "US",
+   "dropped": 6,
+   "first_catch": 1795762977.5,
+   "first_server": "server-eu-central-1-10",
+   "id": "ip-04a9d1effcc191834db1",
+   "net": "net-51fa8e7dcaec",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_10m",
+   "asn": 135377,
+   "attempts": 63,
+   "ban_seconds": 600,
+   "bans": 5,
+   "came_back_hours": null,
+   "country": "HK",
+   "dropped": 89,
+   "first_catch": 1795763860.0,
+   "first_server": "server-us-west-1-34",
+   "id": "ip-a6706cc42cd51f73b896",
+   "net": "net-09df5192dcbc",
+   "window": "not started"
+  },
+  {
+   "arm": "control",
+   "asn": 58519,
+   "attempts": 13,
+   "ban_seconds": 0,
+   "bans": 0,
+   "came_back_hours": null,
+   "country": "CN",
+   "dropped": 0,
+   "first_catch": 1795765598.9,
+   "first_server": "server-us-east-1-29",
+   "id": "ip-0d9a424dd825bfd03fd6",
+   "net": "net-59809f2c58c5",
+   "window": "not started"
+  },
+  {
+   "arm": "control",
+   "asn": 198364,
+   "attempts": 66,
+   "ban_seconds": 0,
+   "bans": 0,
+   "came_back_hours": null,
+   "country": "RO",
+   "dropped": 0,
+   "first_catch": 1795766351.2,
+   "first_server": "server-eu-west-2-40",
+   "id": "ip-ac4decba1023c927639e",
+   "net": "net-e35edc3fd70d",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_12h",
+   "asn": 198364,
+   "attempts": 1,
+   "ban_seconds": 43200,
+   "bans": 2,
+   "came_back_hours": null,
+   "country": "RO",
+   "dropped": 360,
+   "first_catch": 1795766362.6,
+   "first_server": "server-us-west-2-12",
+   "id": "ip-b99dc74feabb90cb1526",
+   "net": "net-e35edc3fd70d",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_12h",
+   "asn": 12714,
+   "attempts": 0,
+   "ban_seconds": 43200,
+   "bans": 1,
+   "came_back_hours": null,
+   "country": "RU",
+   "dropped": 6,
+   "first_catch": 1795767043.6,
+   "first_server": "server-eu-central-1-10",
+   "id": "ip-d016b0cb3eecbde1bcb7",
+   "net": "net-b36cc5cc4cd7",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_12h",
+   "asn": 16276,
+   "attempts": 0,
+   "ban_seconds": 43200,
+   "bans": 1,
+   "came_back_hours": null,
+   "country": "FR",
+   "dropped": 6,
+   "first_catch": 1795767183.8,
+   "first_server": "server-ap-southeast-1-7",
+   "id": "ip-a160722e0d8ba2b72e30",
+   "net": "net-9eb0a638a4ba",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_12h",
+   "asn": 136841,
+   "attempts": 0,
+   "ban_seconds": 43200,
+   "bans": 1,
+   "came_back_hours": null,
+   "country": "ID",
+   "dropped": 6,
+   "first_catch": 1795767371.4,
+   "first_server": "server-us-west-1-34",
+   "id": "ip-84340d5354f0a51d12af",
+   "net": "net-33e09b6ff1f2",
+   "window": "not started"
+  },
+  {
+   "arm": "ban_12h",
+   "asn": 37963,
+   "attempts": 0,
+   "ban_seconds": 43200,
+   "bans": 1,
+   "came_back_hours": null,
+   "country": "CN",
+   "dropped": 8,
+   "first_catch": 1795769483.6,
+   "first_server": "server-us-west-2-20",
+   "id": "ip-8952e4ab0004c0f5ab93",
+   "net": "net-fc5f36ba012d",
+   "window": "not started"
+  },
+  {
+   "arm": "control",
+   "asn": 45090,
+   "attempts": 479,
+   "ban_seconds": 0,
+   "bans": 0,
+   "came_back_hours": null,
+   "country": "CN",
+   "dropped": 0,
+   "first_catch": 1795770111.1,
+   "first_server": "server-ap-southeast-1-23",
+   "id": "ip-abac3294d7b7e156b227",
+   "net": "net-80757e0f22d4",
    "window": "not started"
   }
  ],
@@ -846,10 +996,10 @@
  },
  "gate": {
   "pass": true,
-  "text": "INTEGRITY GATE\n  [PASS] sample ratio (34/33/33): {'control': 22, 'ban_10m': 15, 'ban_12h': 18}, p = 0.568\n  [PASS] no unknown arm values: 0 attackers with a value outside 0/600/43200\n  [PASS] came_back: log matches state: 1 logged, 1 in state\n  [PASS] every event batch accepted by Flagsmith: 56 batches, 0 not 2xx\n  [----] Flagsmith comparison skipped (no --flagsmith file)\n  [info] A/A noise floor (control, even vs odd identity): 0/0 vs 0/0, p = 1.00\n\nGATE: PASS\n\nRESULTS (only attackers whose window has closed: 0 of 55)\n\nPrimary: one unit per address\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back\n\nRobustness: one unit per /24\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back\n\nRobustness: one unit per network operator (ASN)\n  control      0 of     0 came back\n  ban_10m      0 of     0 came back\n  ban_12h      0 of     0 came back"
+  "text": "INTEGRITY GATE\n  [PASS] sample ratio (34/33/33): {'control': 25, 'ban_10m': 17, 'ban_12h': 23}, p = 0.493\n  [PASS] no unknown arm values: 0 attackers with a value outside 0/600/43200\n  [PASS] came_back: log matches state: 3 logged, 3 in state\n  [PASS] every event batch accepted by Flagsmith: 68 batches, 0 not 2xx\n  [----] Flagsmith comparison skipped (no --flagsmith file)\n  [info] A/A noise floor (control, even vs odd identity): 1/2 vs 0/1, p = 0.39\n\nGATE: PASS\n\nRESULTS (only attackers whose window has closed: 4 of 65)\n\nPrimary: one unit per address\n  control      1 of     3 came back  (33.3%)\n  ban_10m      0 of     1 came back  (0.0%)\n  ban_12h      0 of     0 came back\n  ban_10m vs control: P(lower) = 60.1%, difference -33.3 points, 95% interval -63.9 to +56.4: can't call it (interval spans zero)\n  smallest drop this sample could detect: about 108 points\n\nRobustness: one unit per /24\n  control      1 of     2 came back  (50.0%)\n  ban_10m      0 of     1 came back  (0.0%)\n  ban_12h      0 of     0 came back\n  ban_10m vs control: P(lower) = 70.2%, difference -50.0 points, 95% interval -75.2 to +49.8: can't call it (interval spans zero)\n  smallest drop this sample could detect: about 140 points\n\nRobustness: one unit per network operator (ASN)\n  control      1 of     2 came back  (50.0%)\n  ban_10m      0 of     1 came back  (0.0%)\n  ban_12h      0 of     0 came back\n  ban_10m vs control: P(lower) = 70.2%, difference -50.0 points, 95% interval -75.2 to +49.8: can't call it (interval spans zero)\n  smallest drop this sample could detect: about 140 points"
  },
- "generated": 1795759794.3,
- "last_heartbeat": 1795759594.6,
+ "generated": 1795772964.4,
+ "last_heartbeat": 1795772620.2,
  "servers": [
   {
    "events": 1213,
@@ -857,62 +1007,62 @@
    "region": "ap-northeast-1"
   },
   {
-   "events": 19,
+   "events": 23,
    "name": "server-ap-northeast-1-45",
    "region": "ap-northeast-1"
   },
   {
-   "events": 212,
+   "events": 215,
    "name": "server-ap-southeast-1-11",
    "region": "ap-southeast-1"
   },
   {
-   "events": 180,
+   "events": 182,
    "name": "server-ap-southeast-1-15",
    "region": "ap-southeast-1"
   },
   {
-   "events": 60,
+   "events": 65,
    "name": "server-ap-southeast-1-19",
    "region": "ap-southeast-1"
   },
   {
-   "events": 224,
+   "events": 700,
    "name": "server-ap-southeast-1-23",
    "region": "ap-southeast-1"
   },
   {
-   "events": 1187,
+   "events": 1189,
    "name": "server-ap-southeast-1-27",
    "region": "ap-southeast-1"
   },
   {
-   "events": 25,
+   "events": 27,
    "name": "server-ap-southeast-1-3",
    "region": "ap-southeast-1"
   },
   {
-   "events": 1137,
+   "events": 1243,
    "name": "server-ap-southeast-1-30",
    "region": "ap-southeast-1"
   },
   {
-   "events": 398,
+   "events": 454,
    "name": "server-ap-southeast-1-7",
    "region": "ap-southeast-1"
   },
   {
-   "events": 34,
+   "events": 35,
    "name": "server-ap-southeast-2-46",
    "region": "ap-southeast-2"
   },
   {
-   "events": 19,
+   "events": 398,
    "name": "server-ap-southeast-2-47",
    "region": "ap-southeast-2"
   },
   {
-   "events": 50,
+   "events": 234,
    "name": "server-ca-central-1-36",
    "region": "ca-central-1"
   },
@@ -922,198 +1072,198 @@
    "region": "ca-central-1"
   },
   {
-   "events": 40,
+   "events": 67,
    "name": "server-eu-central-1-10",
    "region": "eu-central-1"
   },
   {
-   "events": 1255,
+   "events": 1257,
    "name": "server-eu-central-1-14",
    "region": "eu-central-1"
   },
   {
-   "events": 278,
+   "events": 287,
    "name": "server-eu-central-1-18",
    "region": "eu-central-1"
   },
   {
-   "events": 66,
+   "events": 68,
    "name": "server-eu-central-1-2",
    "region": "eu-central-1"
   },
   {
-   "events": 96,
+   "events": 313,
    "name": "server-eu-central-1-22",
    "region": "eu-central-1"
   },
   {
-   "events": 45,
+   "events": 47,
    "name": "server-eu-central-1-26",
    "region": "eu-central-1"
   },
   {
-   "events": 18,
+   "events": 22,
    "name": "server-eu-central-1-6",
    "region": "eu-central-1"
   },
   {
-   "events": 15,
+   "events": 16,
    "name": "server-eu-north-1-42",
    "region": "eu-north-1"
   },
   {
-   "events": 226,
+   "events": 229,
    "name": "server-eu-north-1-43",
    "region": "eu-north-1"
   },
   {
-   "events": 38,
+   "events": 42,
    "name": "server-eu-west-1-38",
    "region": "eu-west-1"
   },
   {
-   "events": 31,
+   "events": 39,
    "name": "server-eu-west-1-39",
    "region": "eu-west-1"
   },
   {
-   "events": 31,
+   "events": 111,
    "name": "server-eu-west-2-40",
    "region": "eu-west-2"
   },
   {
-   "events": 13,
+   "events": 16,
    "name": "server-eu-west-2-41",
    "region": "eu-west-2"
   },
   {
-   "events": 24,
+   "events": 28,
    "name": "server-sa-east-1-48",
    "region": "sa-east-1"
   },
   {
-   "events": 1222,
+   "events": 1226,
    "name": "server-us-east-1-1",
    "region": "us-east-1"
   },
   {
-   "events": 69,
+   "events": 72,
    "name": "server-us-east-1-13",
    "region": "us-east-1"
   },
   {
-   "events": 98,
+   "events": 100,
    "name": "server-us-east-1-17",
    "region": "us-east-1"
   },
   {
-   "events": 104,
+   "events": 109,
    "name": "server-us-east-1-21",
    "region": "us-east-1"
   },
   {
-   "events": 973,
+   "events": 975,
    "name": "server-us-east-1-25",
    "region": "us-east-1"
   },
   {
-   "events": 14,
+   "events": 38,
    "name": "server-us-east-1-29",
    "region": "us-east-1"
   },
   {
-   "events": 56,
+   "events": 59,
    "name": "server-us-east-1-5",
    "region": "us-east-1"
   },
   {
-   "events": 246,
+   "events": 250,
    "name": "server-us-east-1-9",
    "region": "us-east-1"
   },
   {
-   "events": 493,
+   "events": 498,
    "name": "server-us-east-2-32",
    "region": "us-east-2"
   },
   {
-   "events": 130,
+   "events": 132,
    "name": "server-us-east-2-33",
    "region": "us-east-2"
   },
   {
-   "events": 265,
+   "events": 445,
    "name": "server-us-west-1-34",
    "region": "us-west-1"
   },
   {
-   "events": 1039,
+   "events": 1041,
    "name": "server-us-west-1-35",
    "region": "us-west-1"
   },
   {
-   "events": 129,
+   "events": 318,
    "name": "server-us-west-2-12",
    "region": "us-west-2"
   },
   {
-   "events": 75,
+   "events": 78,
    "name": "server-us-west-2-16",
    "region": "us-west-2"
   },
   {
-   "events": 73,
+   "events": 88,
    "name": "server-us-west-2-20",
    "region": "us-west-2"
   },
   {
-   "events": 146,
+   "events": 148,
    "name": "server-us-west-2-24",
    "region": "us-west-2"
   },
   {
-   "events": 26,
+   "events": 28,
    "name": "server-us-west-2-28",
    "region": "us-west-2"
   },
   {
-   "events": 129,
+   "events": 320,
    "name": "server-us-west-2-31",
    "region": "us-west-2"
   },
   {
-   "events": 34,
+   "events": 682,
    "name": "server-us-west-2-4",
    "region": "us-west-2"
   },
   {
-   "events": 209,
+   "events": 213,
    "name": "server-us-west-2-8",
    "region": "us-west-2"
   }
  ],
  "totals": {
-  "ban_replies_ok": 1992,
+  "ban_replies_ok": 2712,
   "ban_replies_other": 0,
-  "dropped": 2684,
-  "enrolled": 55,
-  "event_batches": 56,
+  "dropped": 3903,
+  "enrolled": 65,
+  "event_batches": 68,
   "event_batches_not_2xx": 0,
   "per_arm": {
    "ban_10m": {
     "came_back": 0,
-    "closed": 0,
-    "enrolled": 15
+    "closed": 1,
+    "enrolled": 17
    },
    "ban_12h": {
     "came_back": 0,
     "closed": 0,
-    "enrolled": 18
+    "enrolled": 23
    },
    "control": {
-    "came_back": 0,
-    "closed": 0,
-    "enrolled": 22
+    "came_back": 1,
+    "closed": 3,
+    "enrolled": 25
    }
   }
  }

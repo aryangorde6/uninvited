@@ -42,7 +42,7 @@ mkdir -p data/backup
 rsh 'sudo tar -C /var/lib -czf - uninvited' > "data/backup/controller-$T.tgz"
 tar -tzf "data/backup/controller-$T.tgz" uninvited/state.json uninvited/events.jsonl >/dev/null
 echo "backup: data/backup/controller-$T.tgz"
-before=$(rsh 'sudo wc -l < /var/lib/uninvited/events.jsonl')
+before=$(rsh 'sudo wc -l /var/lib/uninvited/events.jsonl' | awk '{print $1}')  # wc reads the file as root (a "<" would run unprivileged)
 
 git archive HEAD "${FILES[@]}" | rsh 'set -e
   D=$(mktemp -d); tar -C "$D" -x
