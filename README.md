@@ -1,10 +1,10 @@
 # Uninvited
 
-**Is fail2ban's 10-minute ban enough?** Every attacker who brute-forces SSH on a fleet of 48 real servers becomes one user in a Flagsmith experiment. A flag decides how long that attacker is banned from the whole fleet (no ban, 10 minutes, or 12 hours), and Flagsmith measures who comes back 12–24 hours later, after every ban has ended.
+**Is fail2ban's 10-minute ban enough?** fail2ban (over 19,000 stars on GitHub) bans an attacker for 10 minutes by default (`bantime = 10m` in its `jail.conf`), and I found no study of whether that keeps attackers away. So every attacker who brute-forces SSH on a fleet of 48 real servers becomes one user in a Flagsmith experiment. A flag decides how long that attacker is banned from the whole fleet (no ban, 10 minutes, or 12 hours), and Flagsmith measures who comes back 12–24 hours later, after every ban has ended.
 
 **Website (live counts, results, method, and the replay): https://uninvited.aryangorde.com**
 
-> The experiment is running during Toggle Wars (26–29 Nov 2026). The last return window closes about Sat 28 Nov, 3:05 PM IST; the result and the video go here then.
+> The experiment ran live during Toggle Wars (26–29 Nov 2026). **Enrolment closed on Fri 27 Nov at 3:00 PM IST with 65 real attackers** (no ban 25, 10 minutes 17, 12 hours 23; the integrity gate passes). The last return window closes about Sat 28 Nov, 3:05 PM IST; the result and the video go here then.
 
 ## For judges
 
@@ -13,7 +13,7 @@
 - **Replay it with no key and nothing to install:** the website has no backend. Each page draws itself from one anonymised file, [`site/data/snapshot.json`](site/data/snapshot.json), so the final snapshot is also the replay. To run it on your machine: `python3 -m http.server 8765 --directory site`, then open http://localhost:8765.
 - **The integrity gate runs before any result is read.** It prints PASS or FAIL for the sample ratio, unknown arm values, `came_back` in the log against the saved state, every event batch accepted by Flagsmith, and Flagsmith's numbers per arm against ours (details below).
 - **Re-run the analysis yourself, also with nothing to install:** `python3 -m uninvited.report --snapshot site/data/snapshot.json` (standard library only) reads the same published file and prints the gate and every result: per arm, per /24 and per network operator, with the intervals. Only the check of the controller's private event log is skipped.
-- **Result:** _pending; the experiment is running._ It is read from Flagsmith's results page and checked by our own calculation once the last window has closed. While the interval on the difference spans zero, the result is "can't call it", with the traffic that would settle it; that wording was fixed in advance.
+- **Result:** _pending until the last return window closes (about Sat 28 Nov, 3:05 PM IST)._ It is read from Flagsmith's results page and checked by our own calculation once the last window has closed. While the interval on the difference spans zero, the result is "can't call it", with the traffic that would settle it; that wording was fixed in advance.
 - **Video:** _to come._
 - **What a run costs:** about **$27 of AWS** (an estimate: 48 `t4g.nano` servers and one `t4g.micro` controller from Thursday to Saturday afternoon, stopped after the last window), and Flagsmith's free plan. Replaced with the bill after the run.
 
@@ -44,7 +44,7 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 | Event `came_back` | Sent with `track_event` the first time the attacker reaches port 22 again, 12h05m–24h05m after it was first caught. |
 | Experiment | `came_back` as the primary metric, lower is better, with the pre-registered hypothesis. Its results page gives the win probability and the credible interval. |
 | Flag `ban_enforce` | The kill switch, read every 30 seconds: off means no new enrolments and no new bans on any server. |
-| Rollout | Once enrolment has closed, an attacker outside the experiment gets `ban_policy`'s value for everyone, read every 30 seconds along with the kill switch (environment flags, no identity, so no exposure). When the experiment ends, the winner is rolled out by setting that value in Flagsmith, and the next catch on any server gets it within 30 seconds. Attackers in the experiment keep their arm, so the rollout can't touch the measurement. |
+| Rollout | On the controller since Fri 27 Nov 3:17 PM IST. Once enrolment has closed, an attacker outside the experiment gets `ban_policy`'s value for everyone, read every 30 seconds along with the kill switch (environment flags, no identity, so no exposure). When the experiment ends, the winner is rolled out by setting that value in Flagsmith, and the next catch on any server gets it within 30 seconds. Attackers in the experiment keep their arm, so the rollout can't touch the measurement. |
 
 ## How it works
 
@@ -75,9 +75,9 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 
 ## Limits
 
-- **Small arms.** Far fewer attackers arrived than planned (about 2–3 catches an hour across 48 servers on the first day, against 25 planned), so each arm will hold a few dozen attackers at most and only a large difference could show. The pre-registration gives the smallest detectable drop for each sample size.
+- **Small arms.** Far fewer attackers arrived than planned (about 2–3 catches an hour across 48 servers, against 25 planned), so the arms hold 17 to 25 attackers each and only a large difference could show. The pre-registration gives the smallest detectable drop for each sample size.
 - **One unit is one address.** An attacker that comes back from a new address looks like one that stayed away. If bans push attackers to change address more often, bans look better than they are.
-- **Attackers are not independent.** Botnets share target lists and networks: 7 of the first 14 enrolled came from one network operator. That is why the comparison is rerun with one unit per /24 and per operator.
+- **Attackers are not independent.** Botnets share target lists and networks: 20 of the 65 enrolled came from one network operator. That is why the comparison is rerun with one unit per /24 and per operator.
 - **Cloud servers only,** with a password prompt nobody can pass. Attackers may treat home or company servers differently.
 - **One day of enrolment and one 12–24-hour window.** Returns after a day are not measured.
 - **Not tested:** escalating bans (fail2ban's `bantime.increment`) and the `recidive` jail, the obvious next arms.
@@ -123,15 +123,15 @@ cd /opt/uninvited && sudo python3 -m uninvited.report --data /var/lib/uninvited 
 python3 -m uninvited.report --data DIR --flagsmith flagsmith.json              # with Flagsmith's numbers per arm
 python3 -m uninvited.report --snapshot site/data/snapshot.json                 # from the published dataset
 ```
-The gate's output starts like this (from the run on Thu 26 Nov, 7:00 PM IST, before any window had closed):
+The gate's output starts like this (from the controller on Fri 27 Nov, ~5:10 PM IST, after enrolment closed; 10 of 65 windows had closed):
 ```
 INTEGRITY GATE
-  [PASS] sample ratio (34/33/33): {'control': 6, 'ban_10m': 4, 'ban_12h': 4}, p = 0.783
+  [PASS] sample ratio (34/33/33): {'control': 25, 'ban_10m': 17, 'ban_12h': 23}, p = 0.493
   [PASS] no unknown arm values: 0 attackers with a value outside 0/600/43200
-  [PASS] came_back: log matches state: 0 logged, 0 in state
-  [PASS] every event batch accepted by Flagsmith: 14 batches, 0 not 2xx
+  [PASS] came_back: log matches state: 3 logged, 3 in state
+  [PASS] every event batch accepted by Flagsmith: 68 batches, 0 not 2xx
   [----] Flagsmith comparison skipped (no --flagsmith file)
-  [info] A/A noise floor (control, even vs odd identity): 0/0 vs 0/0, p = 1.00
+  [info] A/A noise floor (control, even vs odd identity): 1/3 vs 1/2, p = 0.71
 
 GATE: PASS
 ```
@@ -159,6 +159,7 @@ python3 -m uninvited.export --data /var/lib/uninvited --out site/data/snapshot.j
 - Network operator and country at enrolment: [iptoasn.com](https://iptoasn.com/)'s IP-to-ASN table (public domain, PDDL v1.0).
 - The website's display type is Ubuntu Sans (Canonical), under the Ubuntu Font Licence ([`site/fonts/LICENCE.txt`](site/fonts/LICENCE.txt)).
 - Art: the site's and the video's images were generated with **ChatGPT**, and the short animated clips with Google's **Gemini Omni**, from prompts written for this project.
+- Video: narration in synthetic voices from **ElevenLabs**, reading a script written for this project; music "Immersed" by Kevin MacLeod ([incompetech.com](https://incompetech.com)), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); sound effects by DRAGON-STUDIO on Pixabay.
 
 ## Licence
 
