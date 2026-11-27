@@ -216,7 +216,10 @@ def main():
             raise SystemExit(f"no controller data in {a.data!r} (no state.json or events.jsonl), so nothing to check.\n"
                              "For the published dataset: python3 -m uninvited.report --snapshot site/data/snapshot.json")
         attackers, events = load(a.data)
-        text, ok = report(attackers, events, a.now or time.time(), fs)
+        # a copy of the controller's data knows returns only up to its last event: a window that closed after the copy
+        # was taken must not count as "didn't come back"
+        last = max((e.get("t", 0) for e in events), default=0) or None
+        text, ok = report(attackers, events, min(a.now or time.time(), last or time.time()), fs)
     print(text)
     raise SystemExit(0 if ok else 1)
 

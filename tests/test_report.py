@@ -91,3 +91,19 @@ def test_no_data_is_refused_not_passed(tmp_path, monkeypatch):
     with pytest.raises(SystemExit) as e:
         r.main()
     assert "no controller data" in str(e.value)
+
+
+def test_a_copy_is_judged_at_its_own_last_event(tmp_path, monkeypatch, capsys):
+    """A window that closes after the data was copied must not count as 'didn't come back'."""
+    import json
+    import sys
+    import pytest
+    from uninvited import report as r
+    t0 = 1_000_000.0
+    state = {"ip-" + "a" * 20: {"arm": "0", "seconds": 0, "first_catch": t0, "first_vm": "vm1", "came_back_at": 0.0}}
+    (tmp_path / "state.json").write_text(json.dumps(state))
+    (tmp_path / "events.jsonl").write_text(json.dumps({"t": t0 + 20 * H, "what": "health"}) + "\n")  # copied 20 h in
+    monkeypatch.setattr(sys, "argv", ["report", "--data", str(tmp_path)])                    # read much later
+    with pytest.raises(SystemExit):
+        r.main()
+    assert "window has closed: 0 of 1" in capsys.readouterr().out
