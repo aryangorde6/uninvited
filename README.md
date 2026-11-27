@@ -64,7 +64,7 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 | `uninvited/export.py` | The anonymised dataset the website reads |
 | `fleet/` | Launcher with hard limits, cloud-init for servers and controller, the ban and log scripts, the firewall table, setup checks, the controller update script |
 | `site/` | The website |
-| `tests/` | 60 tests, run on every push by `.github/workflows/tests.yml` |
+| `tests/` | 61 tests, run on every push by `.github/workflows/tests.yml` |
 
 ## Data
 
@@ -80,6 +80,7 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 - **Attackers are not independent.** Botnets share target lists and networks: 20 of the 65 enrolled came from one network operator. That is why the comparison is rerun with one unit per /24 and per operator.
 - **Cloud servers only,** with a password prompt nobody can pass. Attackers may treat home or company servers differently.
 - **One day of enrolment and one 12–24-hour window.** Returns after a day are not measured.
+- **What a clear answer would take.** The pre-registration's table puts about 200 attackers per arm on detecting a 10-point drop at a 15% return rate. This fleet drew 65 new attackers in 25 hours of enrolment (2.6 an hour), so three arms of 200 would need about 10 days of enrolment. A rerun should also assign arms by network (one arm per /24 or per operator) rather than by address, so one botnet counts once.
 - **Not tested:** escalating bans (fail2ban's `bantime.increment`) and the `recidive` jail, the obvious next arms.
 - **Servers that joined later** could catch attackers only from the time they joined. Assignment is random, so this affects every arm alike.
 
@@ -152,6 +153,7 @@ python3 -m uninvited.export --data /var/lib/uninvited --out site/data/snapshot.j
 
 - **Before 26 Nov:** the idea and plans, the art and the animated clips (see Credits), and a throwaway test of a free Flagsmith account with made-up identities (kept outside this repository; none of its data is in the experiment).
 - **During (from 26 Nov 8:00 AM IST):** all the code in this repository, the website, the servers, and the experiment itself.
+- **The demo video** was cut during the hackathon with my own video scripts from an earlier project, adapted for this one (kept outside this repository).
 
 ## Credits
 
