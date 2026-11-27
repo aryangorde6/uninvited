@@ -80,7 +80,7 @@ Without Flagsmith the servers don't know how long to ban: the flag is the ban po
 - **Attackers are not independent.** Botnets share target lists and networks: 20 of the 65 enrolled came from one network operator. That is why the comparison is rerun with one unit per /24 and per operator.
 - **Cloud servers only,** with a password prompt nobody can pass. Attackers may treat home or company servers differently.
 - **One day of enrolment and one 12–24-hour window.** Returns after a day are not measured.
-- **What a clear answer would take.** The pre-registration's table puts about 200 attackers per arm on detecting a 10-point drop at a 15% return rate. This fleet drew 65 new attackers in 25 hours of enrolment (2.6 an hour), so three arms of 200 would need about 10 days of enrolment. A rerun should also assign arms by network (one arm per /24 or per operator) rather than by address, so one botnet counts once.
+- **What a clear answer would take.** Detecting a 10-point drop needs at least about 200 attackers per arm (the pre-registration's table, at a 15% return rate; more if returns are more common, as the result gives for the rate measured here). This fleet drew 65 new attackers in 25 hours of enrolment (2.6 an hour), so three arms of 200 would need about 10 days of enrolment. A rerun should also assign arms by network (one arm per /24 or per operator) rather than by address, so one botnet counts once.
 - **Not tested:** escalating bans (fail2ban's `bantime.increment`) and the `recidive` jail, the obvious next arms.
 - **Servers that joined later** could catch attackers only from the time they joined. Assignment is random, so this affects every arm alike.
 
